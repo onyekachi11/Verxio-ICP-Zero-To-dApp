@@ -1,8 +1,5 @@
-import { Metadata } from "next";
-// import Loading from "./loading";
 import { NavProvider } from "../../context/nav_context";
 import { Sidebar } from "../../components";
-import { MainDashboardArea } from "../../components/templates";
 import Header from "../../components/Header";
 
 export const metadata = {
@@ -13,14 +10,14 @@ export const metadata = {
 const Layout = ({ children }) => {
   return (
     <NavProvider>
-      <main className="relative w-full flex min-h-screen max-h-screen overflow-hidden  max-w-[1920px] mx-auto">
+      <main className=" flex h-screen overflow-hidden">
         <Sidebar />
-        <MainDashboardArea>
+        <section className="w-full h-screen border overflow-scroll ">
           <Header />
-          <div className="h-full max-h-[calc(100%-100px)] relative p-5 rounded-[16px]  overflow-scroll">
+          <div className=" p-5 overflow-scroll relativ">
             {children}
           </div>
-        </MainDashboardArea>
+        </section>
       </main>
     </NavProvider>
   );

@@ -12,6 +12,7 @@ const Button = ({
   scroll = true,
   outline,
   name,
+  onClick,
   ...props
 }) => {
   return href ? (
@@ -47,6 +48,7 @@ const Button = ({
       flex items-center place-items-center justify-center gap-4 px-[18px] py-2`,
         className
       )}
+      onClick={onClick}
     >
       {name}
     </button>

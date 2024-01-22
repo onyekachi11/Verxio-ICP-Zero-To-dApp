@@ -25,7 +25,7 @@ const SidebarMenuItem = ({children, icon, tab, tabUrl}) => {
 
   return (
     <div
-      className={`flex flex-col text-sm relative after:absolute after:bottom-0 after:right-0 after:contents-[''] after:bg-secondary after:h-[90%] after:w-[4px] after:rounded-[10px] 
+      className={` 
       ${
         children?.find((child) => pathname.startsWith(child.url)) ||
         (tabUrl && pathname.startsWith(tabUrl))
