@@ -19,7 +19,7 @@ const Profile = async () => {
       <div className="flex items-center gap-2 relative">
         <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-8 aspect-square object-cover rounded-full border" />
       </div>
-      <Button name='Post Now' />
+      <Button name='Post Now' href='/dashboard/post-task' />
       <Hamburger />
     </div>
   );

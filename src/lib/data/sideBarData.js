@@ -15,5 +15,10 @@ export const NavigationItems = [
     icon: BriefcaseDollar,
     tabUrl: "/dashboard/learn",
   },
+  {
+    tab: "Submissions",
+    icon: BriefcaseDollar,
+    tabUrl: "/dashboard/submissions",
+  },
 
 ];

@@ -3,8 +3,8 @@ import { Sidebar } from "../../components";
 import Header from "../../components/Header";
 
 export const metadata = {
-  title: "Dashboard | Enugu SME center",
-  description: "Enugu SME center",
+  title: "Dashboard | verxio",
+  description: "verxio",
 };
 
 const Layout = ({ children }) => {
@@ -12,9 +12,9 @@ const Layout = ({ children }) => {
     <NavProvider>
       <main className=" flex h-screen overflow-hidden">
         <Sidebar />
-        <section className="w-full h-screen border overflow-scroll ">
+        <section className="w-full h-[calc(100%-0px)] border border-red-800 overflow-scroll ">
           <Header />
-          <div className=" p-5 overflow-scroll relativ">
+          <div className=" p-5 overflow-scroll h-[calc(100%-75px)]">
             {children}
           </div>
         </section>
