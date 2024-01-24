@@ -1,8 +1,8 @@
 "use client";
-
 import { useContext, useEffect, useState } from "react";
-// import { AuthContext } from "../auth";
+//import { AuthContext } from "../../../components/auth";
 // import { Field, Form, Formik } from 'formik';
+import { authSubscribe } from "@junobuild/core";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Button from "../../../components/Button";
 import * as Yup from "yup";
@@ -11,7 +11,20 @@ import { nanoid } from "nanoid";
 
 const page = () => {
 
-  // const { user } = useContext(AuthContext);
+  const [user, setUser] = useState();
+
+  useEffect(() => {
+    const unsubscribe = authSubscribe((newUser) => {
+      console.log("User Info:", newUser);
+      setUser(newUser);
+    });
+
+    // Clean up the subscription when the component unmounts
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
   const initialValues = {
     title: "",
     description: "",
@@ -62,7 +75,7 @@ const page = () => {
               url = downloadUrl
           }
             await setDoc({
-              collection: "notes",
+              collection: "publish-task",
               doc: {
                 key: nanoid(), 
                 data: {

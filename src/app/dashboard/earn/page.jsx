@@ -3,7 +3,8 @@
 import JobCard from "../../../components/jobComponent/JobCard";
 import { useContext, useEffect, useState,  React } from "react";
 import { listDocs } from "@junobuild/core";
-import { AuthContext } from "../auth";
+
+// import { AuthContext } from "../../../components/auth";
 
 const page = () => {
   // const { user } = useContext(AuthContext);
