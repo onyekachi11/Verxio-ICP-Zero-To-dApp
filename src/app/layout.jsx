@@ -1,10 +1,5 @@
 import "./globals.css";
-// import 'leaflet/dist/leaflet.css';
-import { Lato, Poppins, Inter } from "next/font/google";
-// import { getServerSession } from "next-auth";
-// import { Toaster } from "react-hot-toast";
-// import { authOptions } from "./api/auth/[...nextauth]/route";
-// import Provider from "@/components/Provider";
+import { Lato, Poppins, Inter } from "next/font/google"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -13,8 +8,8 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "Enugu SME center",
-  description: "Enugu SME center",
+  title: "Verxio Protocol",
+  description: "Verxio Protocol",
 };
 
 export default async function RootLayout({children}) {

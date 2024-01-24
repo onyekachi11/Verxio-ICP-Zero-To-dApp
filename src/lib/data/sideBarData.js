@@ -1,24 +1,42 @@
-import JobIcon from "../../assets/jobcreation.svg";
-import Business from "../../assets/business.svg";
+import HandCoins from "../../assets/HandCoins.svg";
 import BriefcaseDollar from "../../assets/briefcase-dollar.svg";
-import People from "../../assets/people.svg";
-// import { INavigationItems } from "../types/types";
+import BookOpen from "../../assets/BookOpen.svg";
+import Handshake from "../../assets/Handshake.svg"
+import Kanban from "../../assets/Kanban.svg"
+import Swap from "../../assets/Swap.svg"
+import Gear from "../../assets/Gear.svg"
 
 export const NavigationItems = [
   {
     tab: "Earn",
-    icon: JobIcon,
+    icon: HandCoins,
     tabUrl: "/dashboard/earn",
   },
   {
     tab: "Learn",
-    icon: BriefcaseDollar,
+    icon: BookOpen,
     tabUrl: "/dashboard/learn",
   },
   {
+    tab: "DAO Proposals",
+    icon: Handshake,
+    tabUrl: "/dashboard/dao-proposal",
+  },
+  {
+    tab: "Projects",
+    icon: Kanban,
+    tabUrl: "/dashboard/projects",
+  },
+  {
     tab: "Submissions",
-    icon: BriefcaseDollar,
+    icon: Swap,
     tabUrl: "/dashboard/submissions",
+  },
+
+  {
+    tab: "Settings",
+    icon: Gear,
+    tabUrl: "/dashboard/settings",
   },
 
 ];
