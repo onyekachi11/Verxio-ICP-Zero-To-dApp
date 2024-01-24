@@ -1,7 +1,39 @@
+"use client";
+
 import JobCard from "../../../components/jobComponent/JobCard";
-import React from "react";
+import { useContext, useEffect, useState,  React } from "react";
+import { listDocs } from "@junobuild/core";
+import { AuthContext } from "../auth";
 
 const page = () => {
+  // const { user } = useContext(AuthContext);
+  // const [items, setItems] = useState([]);
+
+  // useEffect(() => {
+  //   window.addEventListener("reload", list);
+
+  //   return () => {
+  //     window.removeEventListener("reload", list);
+  //   };
+  // }, []);
+
+  // const tasklist = async () => {
+  //   const { items } = await listDocs({
+  //     collection: "notes",
+  //   });
+
+  //   setItems(items);
+  // };
+
+  // useEffect(() => {
+  //   if ([undefined, null].includes(user)) {
+  //     setItems([]);
+  //     return;
+  //   }
+
+  //   (async () => await tasklist())();
+  // }, [user]);
+
   const item = [
     { name: "one" },
     { name: "one" },

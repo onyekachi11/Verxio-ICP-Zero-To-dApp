@@ -1,12 +1,17 @@
 "use client";
 
-import React from "react";
+import { useContext, useEffect, useState } from "react";
+// import { AuthContext } from "../auth";
 // import { Field, Form, Formik } from 'formik';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Button from "../../../components/Button";
 import * as Yup from "yup";
+import { uploadFile } from "@junobuild/core";
+import { nanoid } from "nanoid";
 
 const page = () => {
+
+  // const { user } = useContext(AuthContext);
   const initialValues = {
     title: "",
     description: "",
@@ -20,8 +25,7 @@ const page = () => {
   };
 
   const  value = Object.keys(initialValues)
-  console.log(value[1])
-
+  
   const validationchema = Yup.object().shape({
     title: Yup.string().required("Title is required"),
     description: Yup.string().required("Description is required"),
@@ -45,7 +49,46 @@ const page = () => {
       </div>
       <Formik
         initialValues={initialValues}
-        onSubmit={() => {}}
+        onSubmit={async (values) => {
+          try {
+            // Handle file upload logic
+            if (values.fileDoc !== undefined) {
+              const filename = `${user.key}-${values.fileDoc.name}`;
+              const { downloadUrl } = await uploadFile({
+                collection: "publish-document",
+                data: values.fileDoc,
+                filename,
+              });
+              url = downloadUrl
+          }
+            await setDoc({
+              collection: "notes",
+              doc: {
+                key: nanoid(), 
+                data: {
+                    title: values.title,
+                    description: values.description,
+                    responsibilities: values.responsibilities,
+                    requirements: values.requirements,
+                    jobType: values.jobType,
+                    paymentMethod: values.paymentMethod,
+                    totalPeople: values.totalPeople,
+                    amount: values.amount,
+                    ...(url !== undefined && { url })
+                  },
+              },
+            });
+
+            // Access the download URL and other form values here
+            console.log("upload successful!...")
+            console.log("Download URL:", downloadUrl);
+            console.log("Form values:", values);
+
+           // Now you can perform additional submit logic, e.g., send data to the server
+          } catch (error) {
+            console.error("File Error:", error);
+          }
+        }}
         validationSchema={validationchema}
       >
         {({ isValid, handleSubmit }) => (
