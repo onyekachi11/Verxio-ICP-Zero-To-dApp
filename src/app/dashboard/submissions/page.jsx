@@ -2,12 +2,9 @@
 import React, { useState } from "react";
 import Button from "../../../components/Button";
 import SubmissionCard from "../../../components/submissionCard";
-import { useNav } from "../../../context/nav_context";
 
 const Page = () => {
   const [assignees, setAssignees] = useState([]);
-  // const {value} = useNav()
-  // value()
 
   const [isCheckeds, setIscheckeds] = useState(false);
   const data = [

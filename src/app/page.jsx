@@ -1,16 +1,15 @@
-"use client"
-import { permanentirect } from "next/navigation";
+"use client";
+import { permanentRedirect } from "next/navigation";
 import { useEffect } from "react";
-import { initJuno,  } from "@junobuild/core-peer";
+import { initJuno } from "@junobuild/core-peer";
 
 export default function Profile() {
-
   useEffect(() => {
     (async () =>
       await initJuno({
         satelliteId: "tw7oh-ryaaa-aaaal-adoya-cai",
       }))();
   }, []);
-  
-    permanentRedirect('/dashboard/earn');
-  }
+
+  permanentRedirect("/dashboard/earn");
+}

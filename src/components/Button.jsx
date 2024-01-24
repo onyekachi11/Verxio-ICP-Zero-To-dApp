@@ -13,6 +13,7 @@ const Button = ({
   name,
   onClick,
   icon,
+  type,
   ...props
 }) => {
   return href ? (
@@ -35,6 +36,7 @@ const Button = ({
     </Link>
   ) : (
     <button
+    type= {type}
       {...props}
       className={twMerge(
         `${

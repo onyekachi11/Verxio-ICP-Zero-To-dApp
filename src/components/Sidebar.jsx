@@ -1,8 +1,10 @@
 "use client";
 import React from "react";
-import Button from "./Button";
-import SignOut from "../assets/SignOut.svg"
-import { signIn, signOut } from "@junobuild/core";
+import { initJuno } from "@junobuild/core";
+import { authSubscribe } from "@junobuild/core";
+import LoginButton from "./login"; 
+import LogoutButton from "./logout"; 
+import { useEffect, useState } from "react";
 import { Logo, SidebarMenuItem } from "./atoms";
 import Image from "next/image";
 import AxiosLogo from "../assets/AxiosLogo.svg";
@@ -11,11 +13,24 @@ import { NavigationItems } from "../lib/data/sideBarData";
 
 const Sidebar = () => {
 
-  const { isOpen, toggleNav } = useNav();
+  const { isOpen, toggleNav, user, setUser } = useNav();
+
+    useEffect(() => {
+    (async () =>
+      await initJuno({
+        satelliteId: "tw7oh-ryaaa-aaaal-adoya-cai",
+      }))();
+  }, []);
+
+  authSubscribe((user) => {
+    // console.log("User:", user);
+    setUser(user)
+  });
+
+  console.log(user)
 
   return (
     <>
-    
       <nav
         className={`
       ${
@@ -33,13 +48,11 @@ const Sidebar = () => {
               // <div></div>
             ))}
           </ul>
-          
-          <button onClick={signOut}  className=" flex items-center  mx-auto w-[70%] gap-3">
-            <Image src={SignOut} alt="" />
-            <p className="text-white">Logout</p>
-          </button>
 
-          <button onClick={signOut}  className=" flex items-center  mx-auto w-[80%] gap-3">  
+          <LoginButton />
+          <LogoutButton />
+
+          <button className=" flex items-center  mx-auto w-[80%] gap-3">  
           <p className="text-white text-[12px]">Powered by</p>
             <Image src={AxiosLogo} alt="Axios Logo" width={50} height={50} />
           </button>

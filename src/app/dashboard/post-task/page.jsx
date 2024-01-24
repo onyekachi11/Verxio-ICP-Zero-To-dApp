@@ -1,12 +1,29 @@
 "use client";
-
-import React from "react";
+import { useContext, useEffect, useState } from "react";
+//import { AuthContext } from "../../../components/auth";
 // import { Field, Form, Formik } from 'formik';
+import { authSubscribe } from "@junobuild/core";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Button from "../../../components/Button";
 import * as Yup from "yup";
+import { uploadFile } from "@junobuild/core";
+import { nanoid } from "nanoid";
 
-const page = () => {
+const Page = () => {
+  const [user, setUser] = useState();
+
+  useEffect(() => {
+    const unsubscribe = authSubscribe((newUser) => {
+      console.log("User Info:", newUser);
+      setUser(newUser);
+    });
+
+    // Clean up the subscription when the component unmounts
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
   const initialValues = {
     title: "",
     description: "",
@@ -19,8 +36,7 @@ const page = () => {
     fileDoc: "",
   };
 
-  const  value = Object.keys(initialValues)
-  console.log(value[1])
+  // const  value = Object.keys(initialValues)
 
   const validationchema = Yup.object().shape({
     title: Yup.string().required("Title is required"),
@@ -28,11 +44,57 @@ const page = () => {
     requirements: Yup.string().required("Requirement is required"),
     jobType: Yup.string().required("Job type is required"),
     paymentMethod: Yup.string().required("Please select payment method"),
+    totalPeople: Yup.number("value must be a number").required(
+      "Please input amount"
+    ),
     amount: Yup.number("value must be a number").required(
       "Please input amount"
     ),
     fileDoc: Yup.string().required("Please upload necessary doc"),
   });
+
+  const submitValue = async (values) => {
+    {
+      try {
+        // Handle file upload logic
+        if (values.fileDoc !== undefined) {
+          const filename = `${user.key}-${values.fileDoc.name}`;
+          const { downloadUrl } = await uploadFile({
+            collection: "publish-document",
+            data: values.fileDoc,
+            filename,
+          });
+          url = downloadUrl;
+        }
+        await setDoc({
+          collection: "publish-task",
+          doc: {
+            key: nanoid(),
+            data: {
+              title: values.title,
+              description: values.description,
+              responsibilities: values.responsibilities,
+              requirements: values.requirements,
+              jobType: values.jobType,
+              paymentMethod: values.paymentMethod,
+              totalPeople: values.totalPeople,
+              amount: values.amount,
+              ...(url !== undefined && { url }),
+            },
+          },
+        });
+
+        // Access the download URL and other form values here
+        console.log("upload successful!...");
+        console.log("Download URL:", downloadUrl);
+        console.log("Form values:", values);
+
+        // Now you can perform additional submit logic, e.g., send data to the server
+      } catch (error) {
+        console.error("File Error:", error);
+      }
+    }
+  };
 
   return (
     <div className="border rounded-[8px] px-[90px] py-[50px]">
@@ -48,7 +110,7 @@ const page = () => {
         onSubmit={() => {}}
         validationSchema={validationchema}
       >
-        {({ isValid, handleSubmit }) => (
+        {({ isValid, handleSubmit, values, dirty }) => (
           <Form className="mt-6 flex flex-col gap-5 w-[80%]">
             <div className="flex flex-col gap-3 text-16 ">
               <label htmlFor="title">Enter Task Title</label>
@@ -69,7 +131,9 @@ const page = () => {
             </div>
 
             <div className="flex flex-col gap-3 text-16 ">
-              <label htmlFor="responsibilities">Enter Task Responsibilities</label>
+              <label htmlFor="responsibilities">
+                Enter Task Responsibilities
+              </label>
               <Field
                 name="responsibilities"
                 as="textarea"
@@ -119,7 +183,9 @@ const page = () => {
             </div>
 
             <div className="flex flex-col gap-3 text-16 ">
-              <label htmlFor="totalPeople">How many people are required for the task?</label>
+              <label htmlFor="totalPeople">
+                How many people are required for the task?
+              </label>
               <Field
                 name="totalPeople"
                 className="border outline-none rounded-[4px] border-black p-2"
@@ -147,9 +213,15 @@ const page = () => {
             </div>
             <div>
               <Button
+                type="submit"
                 name="Submit"
                 className="mt-8 w-full "
-                onClick={() => isValid && handleSubmit()}
+                onClick={() => {
+                  if (isValid && dirty) {
+                    // console.log(values);
+                    submitValue(values);
+                  }
+                }}
               />
             </div>
           </Form>
@@ -159,7 +231,7 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
 
 const Error = ({ children }) => {
   return <p className="text-red-400  text-[12px] mt-[-5px]">{children}</p>;
