@@ -1,8 +1,9 @@
-import { permanentRedirect } from "next/navigation";
+"use client"
+import { permanentirect } from "next/navigation";
 import { useEffect } from "react";
 import { initJuno,  } from "@junobuild/core-peer";
 
-export default async function Profile() {
+export default function Profile() {
 
   useEffect(() => {
     (async () =>

@@ -100,7 +100,7 @@ const JobDescription = () => {
           />
         </div>
         <div className="flex gap-5 mt-[56px] justify-end">
-          <Button outline name="Submissions" />
+          <Button outline name="Submissions" href='/dashboard/submissions' />
           <Button name="Apply" onClick={toggleModal} />
         </div>
       </div>
@@ -135,3 +135,6 @@ const JobDescription = () => {
 };
 
 export default JobDescription;
+
+
+

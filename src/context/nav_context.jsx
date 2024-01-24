@@ -17,8 +17,12 @@ export const NavProvider = ({ children }) => {
     setIsOpen(false);
   };
 
+  const value = () =>{
+    console.log('userrrrrrrrrrr')
+  }
+
   return (
-    <NavContext.Provider value={{ isOpen, toggleNav, closeNav,}}>
+    <NavContext.Provider value={{ isOpen, toggleNav, closeNav, value}}>
       {children}
     </NavContext.Provider>
   );

@@ -12,7 +12,7 @@ const Layout = ({ children }) => {
     <NavProvider>
       <main className=" flex h-screen overflow-hidden">
         <Sidebar />
-        <section className="w-full h-[calc(100%-0px)] border border-red-800 overflow-scroll ">
+        <section className="w-full h-[calc(100%-0px)] overflow-scroll ">
           <Header />
           <div className=" p-5 overflow-scroll h-[calc(100%-75px)]">
             {children}
