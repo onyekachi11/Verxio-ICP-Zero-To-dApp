@@ -88,7 +88,7 @@ const page = () => {
             </div>
 
             <div className="flex flex-col gap-3 text-16 ">
-              <label htmlFor="jobType">Post Type</label>
+              <label htmlFor="jobType">Task Type</label>
               <Field
                 name="jobType"
                 as="select"
@@ -104,7 +104,7 @@ const page = () => {
             </div>
 
             <div className="flex flex-col gap-3 text-16 ">
-              <label htmlFor="paymentMethod">Payment Method</label>
+              <label htmlFor="paymentMethod">Payment Token</label>
               <Field
                 name="paymentMethod"
                 as="select"

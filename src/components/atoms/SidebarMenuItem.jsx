@@ -40,8 +40,8 @@ const SidebarMenuItem = ({children, icon, tab, tabUrl}) => {
           onClick={closeNav}
           className={`${
             pathname.startsWith(tabUrl)
-              ? "text-primary font-semibold bg-white"
-              : "text-white font-light"
+              ? "text-[#00ADEF] font-semibold bg-white"
+              : "text-[#F5FCFF] font-light"
           } px-[5%] py-[14px] cursor-pointer flex items-center gap-[10px] pl-[calc(24px+5%)]`}
         >
           <Image src={icon} alt="" />
