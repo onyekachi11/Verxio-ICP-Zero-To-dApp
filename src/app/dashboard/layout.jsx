@@ -3,8 +3,8 @@ import { Sidebar } from "../../components";
 import Header from "../../components/Header";
 
 export const metadata = {
-  title: "Dashboard | verxio",
-  description: "verxio",
+  title: "Dashboard | Verxio Protocol",
+  description: "Community powered future of work",
 };
 
 const Layout = ({ children }) => {

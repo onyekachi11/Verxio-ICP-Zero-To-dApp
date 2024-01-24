@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@junobuild/core": "^0.0.44",
+    "@junobuild/core-peer": "^0.0.9",
     "formik": "^2.4.5",
     "iconsax-react": "^0.0.8",
     "next": "14.1.0",

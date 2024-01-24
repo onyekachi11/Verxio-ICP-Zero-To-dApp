@@ -1,26 +1,20 @@
 "use client";
 import React from "react";
 import Button from "./Button";
-// import { signOut } from "next-auth/react";
+import { signIn, signOut } from "@junobuild/core";
 import { Logo, SidebarMenuItem } from "./atoms";
-// import Logout from "@/assets/logout.svg";
 import Logout from "../assets/logout.svg";
 import Image from "next/image";
 import { useNav } from "../context/nav_context";
 import { NavigationItems } from "../lib/data/sideBarData";
 
 const Sidebar = () => {
-  // const handleSignOut = () => signOut();
+
   const { isOpen, toggleNav } = useNav();
 
   return (
     <>
-      {/* {isOpen && (
-        <button
-          onClick={toggleNav}
-          className={`fixed md:hidden top-0 left-0 w-screen h-screen z-30 backdrop-blur-[1px] bg-[rgba(0,0,0,0.1)]`}
-        ></button>
-      )} */}
+    
       <nav
         className={`
       ${
@@ -38,8 +32,8 @@ const Sidebar = () => {
               // <div></div>
             ))}
           </ul>
-
-          <button className=" flex items-center  mx-auto w-[70%] gap-3">
+          
+          <button onClick={signOut}  className=" flex items-center  mx-auto w-[70%] gap-3">
             <Image src={Logout} alt="" />
             <p className="text-white">Logout</p>
           </button>

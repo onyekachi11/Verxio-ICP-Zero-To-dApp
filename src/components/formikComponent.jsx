@@ -10,7 +10,7 @@ const formikComponent = () => {
         as="as"
         className="border outline-none rounded-[4px] border-black p-2"
       >
-        <option value="">select</option>
+        <option value="">Select Coin Eg. ICP</option>
         <option value="etherum">Ethereum</option>
       </Field>
       <ErrorMessage name="paymentMethod" component={Error} />

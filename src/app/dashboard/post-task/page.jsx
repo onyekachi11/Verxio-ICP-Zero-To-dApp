@@ -51,7 +51,7 @@ const page = () => {
         {({ isValid, handleSubmit }) => (
           <Form className="mt-6 flex flex-col gap-5 w-[80%]">
             <div className="flex flex-col gap-3 text-16 ">
-              <label htmlFor="title">Job Title</label>
+              <label htmlFor="title">Enter Task Title</label>
               <Field
                 name="title"
                 className="border outline-none rounded-[4px] border-black p-2"
@@ -60,7 +60,7 @@ const page = () => {
             </div>
 
             <div className="flex flex-col gap-3 text-16 ">
-              <label htmlFor="description">Job Decription</label>
+              <label htmlFor="description">Enter Task Description</label>
               <Field
                 name="description"
                 className="border outline-none rounded-[4px] border-black p-2"
@@ -69,7 +69,7 @@ const page = () => {
             </div>
 
             <div className="flex flex-col gap-3 text-16 ">
-              <label htmlFor="responsibilities">Job Responsibilities</label>
+              <label htmlFor="responsibilities">Enter Task Responsibilities</label>
               <Field
                 name="responsibilities"
                 as="textarea"
@@ -78,7 +78,7 @@ const page = () => {
             </div>
 
             <div className="flex flex-col gap-3 text-16 ">
-              <label htmlFor="requirements">Job Requirements</label>
+              <label htmlFor="requirements">Enter Task Requirements</label>
               <Field
                 as="textarea"
                 name="requirements"
@@ -88,17 +88,17 @@ const page = () => {
             </div>
 
             <div className="flex flex-col gap-3 text-16 ">
-              <label htmlFor="jobType">Job Type</label>
+              <label htmlFor="jobType">Post Type</label>
               <Field
                 name="jobType"
                 as="select"
                 className="border outline-none rounded-[4px] border-black p-2"
               >
-                <option value="">select</option>
+                <option value="">select task type</option>
                 <option value="quest">Quest</option>
                 <option value="bounty">Bounty</option>
                 <option value="contract">Contract</option>
-                <option value="bounty">Full Time</option>
+                <option value="fulltime">Full Time</option>
               </Field>
               <ErrorMessage name="jobType" component={Error} />
             </div>
@@ -110,7 +110,8 @@ const page = () => {
                 as="select"
                 className="border outline-none rounded-[4px] border-black p-2"
               >
-                <option value="">select</option>
+                <option value="">select payment token eg. ICP</option>
+                <option value="icp">ICP</option>
                 <option value="etherum">Ethereum</option>
                 <option value="solana">Solana</option>
               </Field>
@@ -118,7 +119,7 @@ const page = () => {
             </div>
 
             <div className="flex flex-col gap-3 text-16 ">
-              <label htmlFor="totalPeople">How many people</label>
+              <label htmlFor="totalPeople">How many people are required for the task?</label>
               <Field
                 name="totalPeople"
                 className="border outline-none rounded-[4px] border-black p-2"
@@ -127,7 +128,7 @@ const page = () => {
             </div>
 
             <div className="flex flex-col gap-3 text-16 ">
-              <label htmlFor="amount">Amount</label>
+              <label htmlFor="amount">Enter payment amount</label>
               <Field
                 name="amount"
                 className="border outline-none rounded-[4px] border-black p-2"
