@@ -1,4 +1,4 @@
-import JobCard from '@/components/jobComponent/JobCard';
+// import JobCard from '@/components/jobComponent/JobCard';
 import JobDescription from '../../../../components/jobComponent/jobDescription';
 import React from 'react'
 
