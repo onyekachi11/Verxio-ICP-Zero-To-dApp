@@ -7,6 +7,7 @@ const NavContext = createContext(undefined);
 // Create a provider component to wrap your app
 export const NavProvider = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState('');
 
 
   const toggleNav = () => {
@@ -18,7 +19,7 @@ export const NavProvider = ({ children }) => {
   };
 
   return (
-    <NavContext.Provider value={{ isOpen, toggleNav, closeNav,}}>
+    <NavContext.Provider value={{ isOpen, toggleNav, closeNav, user, setUser}}>
       {children}
     </NavContext.Provider>
   );

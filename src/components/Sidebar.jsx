@@ -13,7 +13,7 @@ import { NavigationItems } from "../lib/data/sideBarData";
 
 const Sidebar = () => {
 
-  const { isOpen, toggleNav } = useNav();
+  const { isOpen, toggleNav, user, setUser } = useNav();
 
     useEffect(() => {
     (async () =>
@@ -23,8 +23,11 @@ const Sidebar = () => {
   }, []);
 
   authSubscribe((user) => {
-    console.log("User:", user);
+    // console.log("User:", user);
+    setUser(user)
   });
+
+  console.log(user)
 
   return (
     <>
