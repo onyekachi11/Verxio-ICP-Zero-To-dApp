@@ -29,12 +29,12 @@ const page = () => {
   return (
     <div className="border p-[32px] rounded-2xl">
       <h2 className="text-primary text-[28px] font-semibold capitalize mb-9">
-        Submissions
+        Project Contract
       </h2>
 
       {data.map((item) => (
         <div key={item.id} className="mb-[32px]">
-          <ProjectCard  item={item} />
+          <ProjectCard item={item} />
         </div>
       ))}
 
