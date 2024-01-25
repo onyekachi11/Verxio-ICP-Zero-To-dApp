@@ -1,13 +1,48 @@
 import Image from "next/image";
-import React from "react";
+import React, { useState,  useEffect } from "react";
 import Thumbsup from "../../assets/thumbs-up.svg";
 import Thumbsdown from "../../assets/thumbs-down.svg";
 import Comment from "../../assets/comment.svg";
 import Ethereum from "../../assets/ethereum.svg";
 import Button from "../Button";
 import Link from "next/link";
+import { listDocs } from "@junobuild/core";
+import { authSubscribe } from "@junobuild/core";
 
 const JobCard = () => {
+
+  const [items, setItems] = useState([]);
+  const [user, setUser] = useState();
+
+  const list = async () => {
+    try {
+      const { items } = await listDocs({
+        collection: "publish-task",
+      });
+      setItems(items);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    const unsubscribe = authSubscribe((newUser) => {
+      setUser(newUser);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []); 
+
+  useEffect(() => {
+    if (user) {
+      list();
+    }
+  }, [user]);
+
+  console.log("List of document: ", items);
+  
   return (
     <div className="bg-[#FFFFFF] px-[32px] py-[24px] rounded-2xl shadow mb-[34px]">
       <div className=" rounded-2xl bg-[#F7F7FD] p-[18px] cursor-pointer flex justify-between border">
