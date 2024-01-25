@@ -13,6 +13,8 @@ import { NavigationItems } from "../lib/data/sideBarData";
 
 const Sidebar = () => {
 
+  
+
   const { isOpen, toggleNav, user, setUser } = useNav();
 
     useEffect(() => {
@@ -27,7 +29,7 @@ const Sidebar = () => {
     setUser(user)
   });
 
-  console.log(user)
+  console.log("User Found", user)
 
   return (
     <>
@@ -49,8 +51,7 @@ const Sidebar = () => {
             ))}
           </ul>
 
-          <LoginButton />
-          <LogoutButton />
+          {user ? <LogoutButton /> : <LoginButton />}
 
           <button className=" flex items-center  mx-auto w-[80%] gap-3">  
           <p className="text-white text-[12px]">Powered by</p>

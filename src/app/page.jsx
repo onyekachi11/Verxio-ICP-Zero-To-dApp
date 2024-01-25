@@ -2,6 +2,7 @@
 import { permanentRedirect } from "next/navigation";
 import { useEffect } from "react";
 import { initJuno } from "@junobuild/core-peer";
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 
 export default function Profile() {
   useEffect(() => {
@@ -10,6 +11,7 @@ export default function Profile() {
         satelliteId: "tw7oh-ryaaa-aaaal-adoya-cai",
       }))();
   }, []);
-
+<AppRouterCacheProvider>
   permanentRedirect("/dashboard/earn");
+  </AppRouterCacheProvider>
 }

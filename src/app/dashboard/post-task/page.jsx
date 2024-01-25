@@ -1,24 +1,21 @@
 "use client";
-import { useContext, useEffect, useState } from "react";
-//import { AuthContext } from "../../../components/auth";
-// import { Field, Form, Formik } from 'formik';
+import { useEffect, useState } from "react";
 import { authSubscribe } from "@junobuild/core";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Button from "../../../components/Button";
 import * as Yup from "yup";
-import { uploadFile } from "@junobuild/core";
+import { uploadFile, setDoc } from "@junobuild/core";
 import { nanoid } from "nanoid";
+import { LoadingButton } from '@mui/lab';
 
 const Page = () => {
   const [user, setUser] = useState();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const unsubscribe = authSubscribe((newUser) => {
-      console.log("User Info:", newUser);
       setUser(newUser);
     });
-
-    // Clean up the subscription when the component unmounts
     return () => {
       unsubscribe();
     };
@@ -35,8 +32,6 @@ const Page = () => {
     amount: "",
     fileDoc: "",
   };
-
-  // const  value = Object.keys(initialValues)
 
   const validationchema = Yup.object().shape({
     title: Yup.string().required("Title is required"),
@@ -55,6 +50,8 @@ const Page = () => {
 
   const submitValue = async (values) => {
     {
+      console.log("Form values:", values);
+      let url; 
       try {
         // Handle file upload logic
         if (values.fileDoc !== undefined) {
@@ -66,6 +63,12 @@ const Page = () => {
           });
           url = downloadUrl;
         }
+
+        // Access the download URL and other form values here
+          console.log("upload successful!...");
+          console.log("Download URL:", url);
+          
+
         await setDoc({
           collection: "publish-task",
           doc: {
@@ -84,10 +87,7 @@ const Page = () => {
           },
         });
 
-        // Access the download URL and other form values here
-        console.log("upload successful!...");
-        console.log("Download URL:", downloadUrl);
-        console.log("Form values:", values);
+        console.log("Task upload successful!...");
 
         // Now you can perform additional submit logic, e.g., send data to the server
       } catch (error) {
@@ -110,7 +110,7 @@ const Page = () => {
         onSubmit={() => {}}
         validationSchema={validationchema}
       >
-        {({ isValid, handleSubmit, values, dirty }) => (
+        {({ isValid, handleSubmit, values, dirty, setFieldValue }) => (
           <Form className="mt-6 flex flex-col gap-5 w-[80%]">
             <div className="flex flex-col gap-3 text-16 ">
               <label htmlFor="title">Enter Task Title</label>
@@ -201,13 +201,13 @@ const Page = () => {
               />
               <ErrorMessage name="amount" component={Error} />
             </div>
-
             <div className="flex flex-col gap-3 text-16 ">
-              <label htmlFor="fileDoc">Upload file (doc, pdf, )</label>
-              <Field
-                type="file"
-                name="fileDoc"
-                className="border outline-none rounded-[4px] border-black p-2"
+              <label htmlFor="fileDoc">Upload file (doc, pdf, png, jpg, etc.)</label>
+              <input 
+              name="fileDoc"
+              className="border outline-none rounded-[4px] border-black p-2"
+              type="file"
+              onChange={(event) => setFieldValue("fileDoc", event.currentTarget.files[0])}
               />
               <ErrorMessage name="fileDoc" component={Error} />
             </div>
@@ -223,6 +223,21 @@ const Page = () => {
                   }
                 }}
               />
+              {/* <LoadingButton
+                type="submit"
+                variant="contained"
+                // color="primary"
+                className="mt-8 w-full"
+                loading={loading}
+                onClick={() => {
+                  if (isValid && dirty) {
+                    submitValue(values);
+                    setLoading(true);
+                  }
+                }}
+              >
+                Submit
+              </LoadingButton> */}
             </div>
           </Form>
         )}
