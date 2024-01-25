@@ -9,8 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/cache": "^11.11.0",
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
     "@junobuild/core": "^0.0.44",
     "@junobuild/core-peer": "^0.0.9",
+    "@mui/icons-material": "^5.15.6",
+    "@mui/lab": "^5.0.0-alpha.162",
+    "@mui/material": "^5.15.6",
+    "@mui/material-nextjs": "^5.15.6",
     "formik": "^2.4.5",
     "iconsax-react": "^0.0.8",
     "nanoid": "^5.0.4",
