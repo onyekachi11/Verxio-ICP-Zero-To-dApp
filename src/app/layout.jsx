@@ -1,5 +1,6 @@
 import "./globals.css";
-import { Lato, Poppins, Inter } from "next/font/google"
+import { Lato, Poppins, Inter } from "next/font/google";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -12,12 +13,12 @@ export const metadata = {
   description: "Verxio Protocol",
 };
 
-export default async function RootLayout({children}) {
+export default async function RootLayout({ children }) {
   // const session = await getServerSession(authOptions);
   return (
     <html lang="en">
       <body className={`${inter.variable} font-inter`}>
-          {children}
+        <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
       </body>
     </html>
   );
