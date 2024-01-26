@@ -3,6 +3,7 @@
 import JobCard from "../../../components/jobComponent/JobCard";
 import { useContext, useEffect, useState,  React } from "react";
 import { listDocs } from "@junobuild/core";
+import { authSubscribe } from "@junobuild/core";
 
 import { AuthContext } from "../../../components/auth";
 import { useNav } from "../../../context/nav_context";
@@ -10,52 +11,53 @@ import { useNav } from "../../../context/nav_context";
 const Page = () => {
   // const { user } = useContext(AuthContext);
 
-  const {user} = useNav()
-  const [items, setItems] = useState([]);
+  // const {user} = useNav()
+  // const [items, setItems] = useState([]);
 
-  console.log(user)
+  // console.log(user)
 
-  // useEffect(() => {
-  //   window.addEventListener("reload", list);
+  // const {jobDetails, setJobDetails} = useNav()
+  const [jobs, setJobs] = useState([])
+  
+  const [user, setUser] = useState();
 
-  //   return () => {
-  //     window.removeEventListener("reload", list);
-  //   };
-  // }, []);
-
-  const tasklist = async () => {
-    const { items } = await listDocs({
-      collection: "notes",
-    });
-
-    setItems(items);
+  const list = async () => {
+    try {
+      const { items } = await listDocs({
+        collection: "publish-task",
+      });
+      setJobs(items);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   useEffect(() => {
-    if ([undefined, null].includes(user)) {
-      setItems([]);
-      return;
-    }
+    const unsubscribe = authSubscribe((newUser) => {
+      setUser(newUser);
+    });
 
-    (async () => await tasklist())();
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      list();
+    }
   }, [user]);
 
-  console.log(items)
+  console.log("List of document: ", jobs);
 
-  const item = [
-    { name: "one" },
-    { name: "two" },
-    { name: "three" },
-    { name: "four" },
-  ];
   return (
     <>
        <div className="border p-[32px] rounded-2xl">
         <h2 className="text-primary text-[28px] font-semibold mb-[32px] capitalize">
           Welcome back John
         </h2>
-        {item.map((item) => (
-          <JobCard key={item.name} />
+        {jobs.map((item) => (
+          <JobCard key={item.key} jobs={item}/>
         ))}
       </div>
     </>

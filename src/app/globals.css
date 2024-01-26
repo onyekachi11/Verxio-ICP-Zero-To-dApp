@@ -38,6 +38,13 @@
   background: rgba(0, 0, 0, 0.5);
 }
 
+.settings-bg-img {
+  background: url('../assets/settings-hero.png');
+  background-repeat: no-repeat;
+  /* background-position: center; */
+  background-size: contain;
+}
+
 .overflow-scroll::-webkit-scrollbar,
 .overflow-y-scroll::-webkit-scrollbar,
 .overflow-x-scroll::-webkit-scrollbar {

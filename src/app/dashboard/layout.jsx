@@ -14,7 +14,7 @@ const Layout = ({ children }) => {
         <Sidebar />
         <section className="w-full h-[calc(100%-0px)] overflow-scroll ">
           <Header />
-          <div className=" p-5 overflow-scroll h-[calc(100%-75px)]">
+          <div className=" overflow-scroll h-[calc(100%-75px)]">
             {children}
           </div>
         </section>

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { Hamburger } from ".";
 import Button from "../Button";
+import Link from "next/link";
 
 const Profile = async () => {
   // const session = (await getServerSession(authOptions)) as Session;
@@ -16,10 +17,13 @@ const Profile = async () => {
         {/* <p className="hidden lg:block text-sm">Notification</p> */}
       </div>
 
-      <div className="flex items-center gap-2 relative">
+      <Link
+        href={"/dashboard/settings"}
+        className="flex items-center gap-2 relative cursor-pointer"
+      >
         <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-8 aspect-square object-cover rounded-full border" />
-      </div>
-      <Button name='Post Now' href='/dashboard/post-task' />
+      </Link>
+      <Button name="Post Now" href="/dashboard/post-task" />
       <Hamburger />
     </div>
   );
