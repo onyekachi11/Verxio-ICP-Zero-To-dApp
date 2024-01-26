@@ -19,6 +19,7 @@ const Button = ({
   return href ? (
     <Link
       scroll={scroll}
+      onClick={onClick}
       className={twMerge(
         `${
           outline
@@ -36,7 +37,7 @@ const Button = ({
     </Link>
   ) : (
     <button
-    type= {type}
+      type={type}
       {...props}
       className={twMerge(
         `${

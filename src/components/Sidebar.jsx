@@ -2,8 +2,8 @@
 import React from "react";
 import { initJuno } from "@junobuild/core";
 import { authSubscribe } from "@junobuild/core";
-import LoginButton from "./login"; 
-import LogoutButton from "./logout"; 
+import LoginButton from "./login";
+import LogoutButton from "./logout";
 import { useEffect, useState } from "react";
 import { Logo, SidebarMenuItem } from "./atoms";
 import Image from "next/image";
@@ -17,7 +17,7 @@ const Sidebar = () => {
 
   const { isOpen, toggleNav, user, setUser } = useNav();
 
-    useEffect(() => {
+  useEffect(() => {
     (async () =>
       await initJuno({
         satelliteId: "tw7oh-ryaaa-aaaal-adoya-cai",
@@ -26,7 +26,7 @@ const Sidebar = () => {
 
   authSubscribe((user) => {
     // console.log("User:", user);
-    setUser(user)
+    setUser(user);
   });
 
   console.log("User Found", user)
@@ -53,8 +53,8 @@ const Sidebar = () => {
 
           {user ? <LogoutButton /> : <LoginButton />}
 
-          <button className=" flex items-center  mx-auto w-[80%] gap-3">  
-          <p className="text-white text-[12px]">Powered by</p>
+          <button className=" flex items-center  mx-auto w-[80%] gap-3">
+            <p className="text-white text-[12px]">Powered by</p>
             <Image src={AxiosLogo} alt="Axios Logo" width={50} height={50} />
           </button>
         </div>
@@ -64,4 +64,3 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-

@@ -7,6 +7,7 @@ export const AuthContext = createContext();
 
 export const Auth = ({ children }) => {
   const [user, setUser] = useState(undefined);
+  console.log('..............',user)
 
   useEffect(() => {
     
