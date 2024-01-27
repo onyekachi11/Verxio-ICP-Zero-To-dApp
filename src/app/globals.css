@@ -39,11 +39,13 @@
 }
 
 .settings-bg-img {
-  background: url('../assets/settings-hero.png');
+  background: url('../assets/settings-hero2.png');
   background-repeat: no-repeat;
-  /* background-position: center; */
-  background-size: contain;
+  background-position: center;
+  background-size: cover;
+  opacity: 0.8;
 }
+
 
 .overflow-scroll::-webkit-scrollbar,
 .overflow-y-scroll::-webkit-scrollbar,
