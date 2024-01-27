@@ -1,7 +1,17 @@
-import { permanentRedirect } from "next/navigation";
+import { useLayoutEffect } from "react";
+import { permanentRedirect, redirect } from "next/navigation";
+import { useSelector } from "react-redux";
 
-const page = () => {
-  permanentRedirect("/dashboard/earn");
+const Page = () => {
+  // const {user}= useNav()
+    const user = useSelector((state) => state.persistedReducer.user.userValue);
+
+  // // permanentRedirect("/dashboard/earn");
+  //   useLayoutEffect(() => {
+  //     if (!user) {
+  //       redirect("/");
+  //     }
+  //   }, [user]);
 };
 
-export default page;
+export default Page;

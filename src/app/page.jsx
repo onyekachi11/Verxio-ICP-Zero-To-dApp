@@ -1,75 +1,70 @@
 "use client";
-import { permanentRedirect } from "next/navigation";
-import { useEffect, useState } from "react";
-import { initJuno } from "@junobuild/core-peer";
+
+import React, { useEffect } from "react";
+import Button from "../components/Button";
+import { signIn, initJuno, authSubscribe } from "@junobuild/core";
+import { useDispatch, useSelector } from "react-redux";
+import { setUserValue } from "../../slices/userSlices";
 import { useNav } from "../context/nav_context";
-import { authSubscribe, listDocs } from "@junobuild/core";
-// import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
-
-export default function Profile() {
-
-  const [user ,setUser] = useState('')
-
-  const {  setUserProfile, userProfile } = useNav();
-  const [userDetailHistory, setuserDetailHistory] = useState([]);
+import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 
+const Home = () => {
+  const dispatch = useDispatch();
+  const router = useRouter()
+  const user = useSelector((state) => state.persistedReducer.user.userValue);
 
-    useEffect(() => {
-      const unsubscribe = authSubscribe((newUser) => {
-        setUser(newUser);
-      });
-      return () => {
-        unsubscribe();
-      };
-    }, []);
-
-
-    useEffect(() => {
-      if (user) {
-        list();
-      }
-    }, [user]);
-
-
-    const list = async () => {
+  useEffect(() => {
+    const initializeJuno = async () => {
       try {
-        const { items } = await listDocs({
-          collection: "userProfile-details",
+        await initJuno({
+          satelliteId: "tw7oh-ryaaa-aaaal-adoya-cai",
         });
-        setuserDetailHistory(items);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error initializing Juno:", error);
+        // Handle the error, e.g., show a user-friendly message or redirect to an error page.
       }
     };
 
-    useEffect(() => {
-      if (userDetailHistory.length > 0) {
-        const lastUserDetails = userDetailHistory[0];
-        if (typeof lastUserDetails === "object") {
-          setUserProfile({
-            ...lastUserDetails.data,
-            owner: lastUserDetails.owner,
-          });
-        }
-      }
-    }, [userDetailHistory]);
-
-  
-
-
-  useEffect(() => {
-    (async () =>
-      await initJuno({
-        satelliteId: "tw7oh-ryaaa-aaaal-adoya-cai",
-      }))();
+    initializeJuno();
   }, []);
 
-  console.log('userProfile2',userProfile)
-  console.log('second user',user);
+  useEffect(() => {
+    const unsubscribe = authSubscribe((userData) => {
+      dispatch(setUserValue(userData));
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [dispatch]);
+
+const handleLogin = async () => {
+  if (user?.key) {
+    // Use the next/navigation redirect function here
+  //  return redirect("/dashboard/earn");
+   router.push("/dashboard/earn");
+  } else {
+    try {
+      // Assuming signIn returns a Promise
+      await signIn();
+      // Redirect after successful sign-in
+      // redirect("/dashboard/earn");
+      router.push('/dashboard/earn')
+    } catch (error) {
+      console.error("Error during sign-in:", error);
+      // Handle the error, e.g., show a user-friendly message or redirect to an error page.
+    }
+  }
+};
 
 
+  return (
+    <div className="flex justify-center items-center h-screen">
+      <Button name="enter App" onClick={()=> handleLogin()} />
+    </div>
+  );
+};
 
-  permanentRedirect("/dashboard/earn");
-
-}
+export default Home;

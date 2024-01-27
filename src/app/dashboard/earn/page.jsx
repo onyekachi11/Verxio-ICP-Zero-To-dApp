@@ -1,25 +1,20 @@
 "use client";
 
 import JobCard from "../../../components/jobComponent/JobCard";
-import { useContext, useEffect, useState,  React } from "react";
+import { useContext, useEffect, useState, React } from "react";
+import { useSelector } from "react-redux";
 import { listDocs } from "@junobuild/core";
 import { authSubscribe } from "@junobuild/core";
 
 import { AuthContext } from "../../../components/auth";
 import { useNav } from "../../../context/nav_context";
+import { root } from "../../../../store";
 
 const Page = () => {
-  // const { user } = useContext(AuthContext);
+  const [jobs, setJobs] = useState([]);
 
-  // const {user} = useNav()
-  // const [items, setItems] = useState([]);
+  const user = useSelector((state)=> state.persistedReducer.user.userValue)
 
-  // console.log(user)
-
-  // const {jobDetails, setJobDetails} = useNav()
-  const [jobs, setJobs] = useState([])
-  
-  const [user, setUser] = useState();
 
   const list = async () => {
     try {
@@ -32,15 +27,7 @@ const Page = () => {
     }
   };
 
-  useEffect(() => {
-    const unsubscribe = authSubscribe((newUser) => {
-      setUser(newUser);
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+  console.log(user)
 
   useEffect(() => {
     if (user) {
@@ -48,16 +35,14 @@ const Page = () => {
     }
   }, [user]);
 
-  // console.log("List of document: ", jobs);
-
   return (
     <>
-       <div className="border p-[32px] rounded-2xl">
+      <div className="border p-[32px] rounded-2xl">
         <h2 className="text-primary text-[28px] font-semibold mb-[32px] capitalize">
           Welcome back John
         </h2>
         {jobs.map((item) => (
-          <JobCard key={item.key} jobs={item}/>
+          <JobCard key={item.key} jobs={item} />
         ))}
       </div>
     </>

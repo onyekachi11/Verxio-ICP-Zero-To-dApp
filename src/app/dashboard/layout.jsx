@@ -9,7 +9,7 @@ export const metadata = {
 
 const Layout = ({ children }) => {
   return (
-    <NavProvider>
+    // <NavProvider>
       <main className=" flex h-screen overflow-hidden">
         <Sidebar />
         <section className="w-full h-[calc(100%-0px)] overflow-scroll ">
@@ -19,7 +19,7 @@ const Layout = ({ children }) => {
           </div>
         </section>
       </main>
-    </NavProvider>
+    // </NavProvider>
   );
 };
 
