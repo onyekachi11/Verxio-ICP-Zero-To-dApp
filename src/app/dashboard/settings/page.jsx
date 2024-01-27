@@ -99,7 +99,9 @@ const Page = () => {
 
   const submitValue = async (values) => {
       {
-      // console.log("Form values:", values);;
+      console.log("Image Profile: ", selectedImage)
+      console.log("Form values:", values);
+      console.log("Uploading Files...");
       let url; 
       let ImageUrl;
       try {
@@ -114,11 +116,11 @@ const Page = () => {
           url = downloadUrl;
         }
 
-        if (values.profileImageDoc !== undefined) {
-          const filename = `${user.key}-${values.profileImageDoc.name}`;
+        if (profileImageDoc !== undefined) {
+          const filename = `${user.key}-${profileImageDoc.name}`;
           const { downloadUrl } = await uploadFile({
             collection: "userProfile-photo",
-            data: values.fileDoc,
+            data: profileImageDoc,
             filename,
           });
           ImageUrl = downloadUrl;
@@ -177,6 +179,7 @@ const Page = () => {
           </div>
         </div>
         <input
+          name="profileImageDoc"
           type="file"
           capture="environment"
           className="hidden"
