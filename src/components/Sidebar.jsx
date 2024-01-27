@@ -25,9 +25,16 @@ const Sidebar = () => {
   }, []);
 
   authSubscribe((user) => {
-    // console.log("User:", user);
-    setUser(user);
+    console.log("Authentication state changed:", user);
+    if(user){
+      const userObject = {
+        owner: user.owner,
+        key: user.key,
+      };
+      setUser(userObject);
+    }
   });
+  
 
   console.log("User Found", user)
 
