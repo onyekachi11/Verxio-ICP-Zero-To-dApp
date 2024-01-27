@@ -48,7 +48,7 @@ const Page = () => {
     }
   }, [user]);
 
-  console.log("List of document: ", jobs);
+  // console.log("List of document: ", jobs);
 
   return (
     <>

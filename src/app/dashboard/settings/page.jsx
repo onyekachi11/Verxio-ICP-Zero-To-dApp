@@ -1,6 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
-import { authSubscribe } from "@junobuild/core";
+import { useContext, useEffect, useState,  React } from "react";
+import { authSubscribe, listDocs } from "@junobuild/core";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Button from "../../../components/Button";
 import * as Yup from "yup";
@@ -10,6 +10,8 @@ import { LoadingButton } from "@mui/lab";
 
 const Page = () => {
   const [user, setUser] = useState();
+  const [userDetailHistory, setuserDetailHistory] = useState([])
+  const [userProfile, setuserProfile] = useState()
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -21,21 +23,50 @@ const Page = () => {
     };
   }, []);
 
+  const list = async () => {
+    try {
+      const { items } = await listDocs({
+        collection: "userProfile-details",
+      });
+      setuserDetailHistory(items);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      list();
+    }
+  }, [user]);
+
+  const lastUserDetails = userDetailHistory[0];
+  let userProfileDetails;
+// Check if the object is not null or undefined
+  if (typeof lastUserDetails === 'object') {
+        userProfileDetails = {
+        ...lastUserDetails.data,
+        owner: lastUserDetails.owner 
+    };
+    } 
+  
+  console.log("User Profile", userProfileDetails);
+
   const initialValues = {
     firstName: "",
     lastName: "",
-    description: "",
     bio: "",
     email: '',
     phoneNumber: "",
     website: "",
     fileDoc: "",
+    profileImageDoc: "",
   };
 
   const validationchema = Yup.object().shape({
     firstName: Yup.string().required("First name is required"),
     lastName: Yup.string().required("Last name is required"),
-    // bio: Yup.string().required("Bio is required"),
+    bio: Yup.string().required("Bio is required"),
     email: Yup.string().required("Email is required"),
     phoneNumber: Yup.number("value must be a number").required(
       "Please input number"
@@ -44,8 +75,63 @@ const Page = () => {
   });
 
   const submitValue = async (values) => {
-  console.log(values)
+    {
+      // console.log("Form values:", values);
+      let url; 
+      let ImageUrl;
+      try {
+        // Handle file upload logic
+        if (values.fileDoc !== undefined) {
+          const filename = `${user.key}-${values.fileDoc.name}`;
+          const { downloadUrl } = await uploadFile({
+            collection: "userProfile-document",
+            data: values.fileDoc,
+            filename,
+          });
+          url = downloadUrl;
+        }
+
+        if (values.profileImageDoc !== undefined) {
+          const filename = `${user.key}-${values.profileImageDoc.name}`;
+          const { downloadUrl } = await uploadFile({
+            collection: "userProfile-photo",
+            data: values.fileDoc,
+            filename,
+          });
+          ImageUrl = downloadUrl;
+        }
+
+        // Access the download URL and other form values here
+          console.log("Stored on the Juno Storage...");
+          console.log("Download URL:", url);
+
+        await setDoc({
+          collection: "userProfile-details",
+          doc: {
+            key: nanoid(),
+            data: {
+            firstName: values.firstName,
+            lastName: values.lastName,
+            bio: values.bio,
+            email: values.email,
+            phoneNumber: values.phoneNumber,
+            website: values.website,
+            fileDoc: url,
+            profileImageDoc: ImageUrl
+            },
+          },
+        });
+
+        console.log("Profile upload successful!...");
+
+        // Now you can perform additional submit logic, e.g., send data to the server
+      } catch (error) {
+        console.error("Upload Error:", error);
+      }
+    }
   };
+
+
 
   return (
     <>
@@ -101,7 +187,7 @@ const Page = () => {
                 <ErrorMessage name="phoneNumber" component={Error} />
               </div>
               <div className="flex flex-col gap-3 text-16 ">
-                <label htmlFor="website">website</label>
+                <label htmlFor="website">Website</label>
                 <Field
                   name="website"
                   className="border outline-none rounded-[4px] border-black p-2"
@@ -117,16 +203,16 @@ const Page = () => {
                   name="fileDoc"
                   className="border outline-none rounded-[4px] border-black p-2"
                   type="file"
-                  // onChange={(event) =>
-                  //   setFieldValue("fileDoc", event.currentTarget.files[0])
-                  // }
+                  onChange={(event) =>
+                    setFieldValue("fileDoc", event.currentTarget.files[0])
+                  }
                 />
                 <ErrorMessage name="fileDoc" component={Error} />
               </div>
               <div>
                 <Button
                   type="submit"
-                  name="Submit"
+                  name="Update Profile"
                   className="mt-8 w-full "
                   onClick={() => {
                     if (isValid && dirty) {
