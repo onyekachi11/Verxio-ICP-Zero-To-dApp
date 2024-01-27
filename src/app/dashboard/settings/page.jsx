@@ -1,5 +1,5 @@
 "use client";
-import { useContext, useEffect, useState,  React, useRef } from "react";
+import { useContext, useEffect, useState, React, useRef } from "react";
 import { authSubscribe, listDocs } from "@junobuild/core";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Button from "../../../components/Button";
@@ -9,24 +9,27 @@ import { uploadFile, setDoc } from "@junobuild/core";
 import { nanoid } from "nanoid";
 import { LoadingButton } from "@mui/lab";
 import Image from "next/image";
+import { useNav } from "../../../context/nav_context";
 
 const Page = () => {
-  const [user, setUser] = useState();
-  const [userDetailHistory, setuserDetailHistory] = useState([])
-  const [userProfile, setuserProfile] = useState()
+  const [user2, setUser2] = useState();
+  const [userDetailHistory, setuserDetailHistory] = useState([]);
+  const [userProfile, setuserProfile] = useState();
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
 
   const fileInputRef = useRef(null);
 
-  useEffect(() => {
-    const unsubscribe = authSubscribe((newUser) => {
-      setUser(newUser);
-    });
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+  const {user} = useNav()
+
+  // useEffect(() => {
+  //   const unsubscribe = authSubscribe((newUser) => {
+  //     setUser2(newUser);
+  //   });
+  //   return () => {
+  //     unsubscribe();
+  //   };
+  // }, []);
 
   const list = async () => {
     try {
@@ -45,17 +48,22 @@ const Page = () => {
     }
   }, [user]);
 
+
   const lastUserDetails = userDetailHistory[0];
   let userProfileDetails;
-// Check if the object is not null or undefined
-  if (typeof lastUserDetails === 'object') {
-        userProfileDetails = {
-        ...lastUserDetails.data,
-        owner: lastUserDetails.owner 
+  // Check if the object is not null or undefined
+  if (typeof lastUserDetails === "object") {
+    userProfileDetails = {
+      ...lastUserDetails.data,
+      owner: lastUserDetails.owner,
     };
-    } 
-  
+  }
+
   console.log("User Profile", userProfileDetails);
+  // console.log('userrrrrrrrrr',user2)
+  console.log('userrrrrrrrrr222222222222222',user)
+  // console.log(userDetailHistory)
+
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -83,7 +91,7 @@ const Page = () => {
     phoneNumber: "",
     website: "",
     fileDoc: "",
-    profileImageDoc: "",
+    profileImageDoc: selectedImage,
   };
 
   const validationchema = Yup.object().shape({
@@ -98,9 +106,9 @@ const Page = () => {
   });
 
   const submitValue = async (values) => {
-      {
+    {
       // console.log("Form values:", values);;
-      let url; 
+      let url;
       let ImageUrl;
       try {
         // Handle file upload logic
@@ -125,22 +133,22 @@ const Page = () => {
         }
 
         // Access the download URL and other form values here
-          console.log("Stored on the Juno Storage...");
-          console.log("Download URL:", url);
+        console.log("Stored on the Juno Storage...");
+        console.log("Download URL:", url);
 
         await setDoc({
           collection: "userProfile-details",
           doc: {
             key: nanoid(),
             data: {
-            firstName: values.firstName,
-            lastName: values.lastName,
-            bio: values.bio,
-            email: values.email,
-            phoneNumber: values.phoneNumber,
-            website: values.website,
-            fileDoc: url,
-            profileImageDoc: ImageUrl
+              firstName: values.firstName,
+              lastName: values.lastName,
+              bio: values.bio,
+              email: values.email,
+              phoneNumber: values.phoneNumber,
+              website: values.website,
+              fileDoc: url,
+              profileImageDoc: ImageUrl,
             },
           },
         });
@@ -153,8 +161,6 @@ const Page = () => {
       }
     }
   };
-
-
 
   return (
     <>
