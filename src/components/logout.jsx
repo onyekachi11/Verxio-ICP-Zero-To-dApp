@@ -6,28 +6,31 @@ import SignOut from "../assets/SignOut.svg";
 import { permanentRedirect, redirect } from "next/navigation";
 import { useNav } from "../context/nav_context";
 import { useDispatch } from "react-redux";
-import { setUserValue } from "../../slices/userSlices";
+import { setUserValue, setUserProfile } from "../../slices/userSlices";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const LogoutButton = () => {
-  const { user } = useNav();
 
   const dispatch = useDispatch();
+  const router = useRouter()
 
   const handleLogout = () => {
     signOut();
     dispatch(setUserValue({}));
+    dispatch(setUserProfile({}))
+    router.push('/')
   };
 
   return (
-    <Link
-      href="/"
+    <div
+      // href="/"
       onClick={handleLogout}
-      className="flex items-center mx-auto w-[70%] gap-3"
+      className="flex items-center mx-auto w-[70%] gap-3 cursor-pointer"
     >
       <Image src={SignOut} alt="" />
       <p className="text-white">Logout</p>
-    </Link>
+    </div>
   );
 };
 

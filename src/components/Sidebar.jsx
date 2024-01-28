@@ -6,31 +6,28 @@ import Image from "next/image";
 import AxiosLogo from "../assets/AxiosLogo.svg";
 import { useNav } from "../context/nav_context";
 import { NavigationItems } from "../lib/data/sideBarData";
-import { setUserValue } from "../../slices/userSlices";
 import { useDispatch, useSelector } from "react-redux";
-import LoginButton from "./login";
 import LogoutButton from "./logout";
 
 const Sidebar = () => {
   const { isOpen, toggleNav } = useNav();
   const dispatch = useDispatch();
-  // const user = useSelector((state) => state.persistedReducer.user.userValue);
+  const user = useSelector((state) => state.persistedReducer.user.userValue);
 
   useEffect(() => {
-    const initJunoAsync = async () => {
-      await initJuno({
-        satelliteId: "tw7oh-ryaaa-aaaal-adoya-cai",
-      });
+    const initializeJuno = async () => {
+      try {
+        await initJuno({
+          satelliteId: "tw7oh-ryaaa-aaaal-adoya-cai",
+        });
+      } catch (error) {
+        console.error("Error initializing Juno:", error);
+        // Handle the error, e.g., show a user-friendly message or redirect to an error page.
+      }
     };
-    initJunoAsync();
+
+    initializeJuno();
   }, []);
-
-  authSubscribe((user) => {
-    dispatch(setUserValue(user));
-  });
-
-
-  // console.log(user)
 
   return (
     <nav

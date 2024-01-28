@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 const Page = () => {
   // const {user}= useNav()
     const user = useSelector((state) => state.persistedReducer.user.userValue);
+    // console.log('second',user)
 
   // // permanentRedirect("/dashboard/earn");
   //   useLayoutEffect(() => {

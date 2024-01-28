@@ -9,11 +9,12 @@ import { useNav } from "../context/nav_context";
 import { redirect } from "next/navigation";
 import { useRouter } from "next/navigation";
 
-
 const Home = () => {
   const dispatch = useDispatch();
-  const router = useRouter()
+  const router = useRouter();
   const user = useSelector((state) => state.persistedReducer.user.userValue);
+
+  // console.log('begining',user)
 
   useEffect(() => {
     const initializeJuno = async () => {
@@ -32,37 +33,32 @@ const Home = () => {
 
   useEffect(() => {
     const unsubscribe = authSubscribe((userData) => {
-      dispatch(setUserValue(userData));
+      if (userData) {
+        const { key, owner } = userData;
+        dispatch(setUserValue({ key, owner }));
+      }
     });
-
-    return () => {
+      return () => {
       unsubscribe();
     };
   }, [dispatch]);
 
-const handleLogin = async () => {
-  if (user?.key) {
-    // Use the next/navigation redirect function here
-  //  return redirect("/dashboard/earn");
-   router.push("/dashboard/earn");
-  } else {
-    try {
-      // Assuming signIn returns a Promise
-      await signIn();
-      // Redirect after successful sign-in
-      // redirect("/dashboard/earn");
-      router.push('/dashboard/earn')
-    } catch (error) {
-      console.error("Error during sign-in:", error);
-      // Handle the error, e.g., show a user-friendly message or redirect to an error page.
+  const handleLogin = async () => {
+    if (user?.key) {
+      router.push("/dashboard/earn");
+    } else {
+      try {
+        await signIn();
+        router.push("/dashboard/earn");
+      } catch (error) {
+        console.error("Error during sign-in:", error);
+      }
     }
-  }
-};
-
+  };
 
   return (
     <div className="flex justify-center items-center h-screen">
-      <Button name="enter App" onClick={()=> handleLogin()} />
+      <Button name="enter App" onClick={() => handleLogin()} />
     </div>
   );
 };

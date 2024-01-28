@@ -1,6 +1,6 @@
 "use client";
 import { useContext, useEffect, useState, React, useRef } from "react";
-import { authSubscribe, listDocs } from "@junobuild/core";
+import { authSubscribe, initJuno, listDocs } from "@junobuild/core";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Button from "../../../components/Button";
 import Edit from "../../../assets/edit.svg";
@@ -10,32 +10,47 @@ import { nanoid } from "nanoid";
 import { LoadingButton } from "@mui/lab";
 import Image from "next/image";
 import { useNav } from "../../../context/nav_context";
+import { useSelector, useDispatch } from "react-redux";
+import { root } from "../../../../store";
+import { setUserProfile } from "../../../../slices/userSlices";
 
 const Page = () => {
-  const [user2, setUser2] = useState();
+  const user = useSelector((state) => state.persistedReducer.user.userValue);
+  const userProfile = useSelector(
+    (state) => state.persistedReducer.user.userProfile
+  );
+
+  const dispatch = useDispatch();
+
   const [userDetailHistory, setuserDetailHistory] = useState([]);
-  const [userProfile, setuserProfile] = useState();
+  // const [userProfile, setuserProfile] = useState();
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [profileImg, setProfileImg] = useState(null);
 
   const fileInputRef = useRef(null);
 
-  const {user} = useNav()
+  useEffect(() => {
+    const initializeJuno = async () => {
+      try {
+        await initJuno({
+          satelliteId: "tw7oh-ryaaa-aaaal-adoya-cai",
+        });
+      } catch (error) {
+        console.error("Error initializing Juno:", error);
+        // Handle the error, e.g., show a user-friendly message or redirect to an error page.
+      }
+    };
 
-  // useEffect(() => {
-  //   const unsubscribe = authSubscribe((newUser) => {
-  //     setUser2(newUser);
-  //   });
-  //   return () => {
-  //     unsubscribe();
-  //   };
-  // }, []);
+    initializeJuno();
+  }, []);
 
   const list = async () => {
     try {
       const { items } = await listDocs({
         collection: "userProfile-details",
       });
+      console.log(items);
       setuserDetailHistory(items);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -48,25 +63,26 @@ const Page = () => {
     }
   }, [user]);
 
+  // user && list();
 
-  const lastUserDetails = userDetailHistory[0];
-  let userProfileDetails;
-  // Check if the object is not null or undefined
-  if (typeof lastUserDetails === "object") {
-    userProfileDetails = {
-      ...lastUserDetails.data,
-      owner: lastUserDetails.owner,
-    };
-  }
+  useEffect(() => {
+    const lastUserDetails = userDetailHistory[0];
+    if (typeof lastUserDetails === "object") {
+      dispatch(
+        setUserProfile({
+          ...lastUserDetails.data,
+          owner: lastUserDetails.owner,
+        })
+      );
+    }
+  }, [dispatch, userDetailHistory]);
 
-  console.log("User Profile", userProfileDetails);
-  // console.log('userrrrrrrrrr',user2)
-  console.log('userrrrrrrrrr222222222222222',user)
-  // console.log(userDetailHistory)
-
+  console.log("User Profile", userProfile);
+  console.log("userrrrrrrrrr222222222222222", user);
 
   const handleImageChange = (event) => {
-    const file = event.target.files[0];
+    const file = event.currentTarget.files[0];
+    setProfileImg(file);
 
     if (file) {
       const reader = new FileReader();
@@ -91,7 +107,7 @@ const Page = () => {
     phoneNumber: "",
     website: "",
     fileDoc: "",
-    profileImageDoc: selectedImage,
+    profileImageDoc: "",
   };
 
   const validationchema = Yup.object().shape({
@@ -106,8 +122,11 @@ const Page = () => {
   });
 
   const submitValue = async (values) => {
+    setLoading(true);
     {
-      // console.log("Form values:", values);;
+      console.log("Image Profile: ", profileImg);
+      console.log("Form values:", values);
+      console.log("Uploading Files...");
       let url;
       let ImageUrl;
       try {
@@ -122,11 +141,11 @@ const Page = () => {
           url = downloadUrl;
         }
 
-        if (values.profileImageDoc !== undefined) {
-          const filename = `${user.key}-${values.profileImageDoc.name}`;
+        if (profileImg !== undefined) {
+          const filename = `${user.key}-${profileImg.name}`;
           const { downloadUrl } = await uploadFile({
             collection: "userProfile-photo",
-            data: values.fileDoc,
+            data: profileImg,
             filename,
           });
           ImageUrl = downloadUrl;
@@ -160,6 +179,7 @@ const Page = () => {
         console.error("Upload Error:", error);
       }
     }
+    setLoading(false);
   };
 
   return (
@@ -183,8 +203,9 @@ const Page = () => {
           </div>
         </div>
         <input
+          name="profileImageDoc"
           type="file"
-          capture="environment"
+          // capture="environment"
           className="hidden"
           accept="image/*"
           ref={fileInputRef}
@@ -272,7 +293,7 @@ const Page = () => {
                 <ErrorMessage name="fileDoc" component={Error} />
               </div>
               <div>
-                <Button
+                {/* <Button
                   type="submit"
                   name="Update Profile"
                   className="mt-8 w-full "
@@ -282,22 +303,22 @@ const Page = () => {
                       submitValue(values);
                     }
                   }}
-                />
-                {/* <LoadingButton
-                type="submit"
-                variant="contained"
-                // color="primary"
-                className="mt-8 w-full"
-                loading={loading}
-                onClick={() => {
-                  if (isValid && dirty) {
-                    submitValue(values);
-                    setLoading(true);
-                  }
-                }}
+                /> */}
+                <LoadingButton
+                  type="submit"
+                  variant="contained"
+                  // color="primary"
+                  className="mt-8 w-full"
+                  loading={loading}
+                  onClick={() => {
+                    if (isValid && dirty) {
+                      submitValue(values);
+                      // setLoading(true);
+                    }
+                  }}
                 >
-                Submit
-              </LoadingButton> */}
+                  Submit
+                </LoadingButton>
               </div>
             </Form>
           )}

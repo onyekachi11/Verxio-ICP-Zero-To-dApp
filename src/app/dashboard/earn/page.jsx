@@ -22,16 +22,19 @@ const Page = () => {
         collection: "publish-task",
       });
       setJobs(items);
+
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
-  console.log(user)
+  // list()
+
+  // console.log(user)
 
   useEffect(() => {
     if (user) {
-      list();
+      list()
     }
   }, [user]);
 
