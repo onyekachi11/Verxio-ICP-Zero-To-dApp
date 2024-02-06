@@ -14,9 +14,11 @@ import { listDocs } from "@junobuild/core";
 import { authSubscribe } from "@junobuild/core";
 import { useNav } from "../../context/nav_context";
 import { useSelector, useDispatch } from "react-redux";
+import LikeButtons from "../likeButtons";
+import CommentButton from "../commentButton";
 
 const JobCard = ({ jobs }) => {
-  console.log(jobs);
+  // console.log(jobs);
   // const { setJobDetails} = useNav();
 
   const dispatch = useDispatch();
@@ -61,25 +63,8 @@ const JobCard = ({ jobs }) => {
       </div>
       <div className="flex justify-between mt-[22px] items-center">
         <div className=" flex gap-[24px] items-center">
-          <div className="flex border rounded-lg px-4 py-2 border-[#B6B8EC] items-center">
-            <div className="flex gap-1 items-center border-r pr-2 mr-2">
-              <Image alt="like it" src={Thumbsup} className="cursor-pointer" />
-              <p className="text-[12px]">1.2k</p>
-            </div>
-            <Image
-              alt="dislike it"
-              src={Thumbsdown}
-              className="cursor-pointer"
-            />
-          </div>
-          <div className="border rounded-lg px-4 py-[9px] border-[#B6B8EC] flex gap-2 items-center">
-            <Image
-              alt="comment on it"
-              src={Comment}
-              className="cursor-pointer"
-            />
-            <p className="text-[12px]">201</p>
-          </div>
+          <LikeButtons />
+          <CommentButton />
         </div>
         <div className="flex gap-[24px] items-center">
           <div className="flex border rounded-lg px-4 py-2 border-[#B6B8EC] items-center gap-2">

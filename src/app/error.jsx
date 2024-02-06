@@ -17,7 +17,7 @@ const Error = ({reset}) => {
       <p>We are working to fix this.</p>
       <div className="flex gap-4 items-center mt-6">
         <Button outline onClick={reset} name='Try Again'/>
-        <Button onClick={handleGoBack}>Go back</Button>
+        <Button onClick={handleGoBack} name='Go back'/>
       </div>
     </section>
   );

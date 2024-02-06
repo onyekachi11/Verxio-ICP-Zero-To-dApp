@@ -16,6 +16,8 @@ import Link from "next/link";
 import DescListCard from "./descListCard";
 import { UseSelector, useSelector } from "react-redux";
 import { root } from "../../../store";
+import LikeButtons from "../likeButtons";
+import CommentButton from "../commentButton";
 
 const JobDescription = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,7 +25,7 @@ const JobDescription = () => {
   const data = useSelector(
     (state) => state.persistedReducer.jobValues.jobDetails
   );
-  console.log(data)
+  console.log(data);
 
   // const { jobDetails } = useNav();
 
@@ -74,29 +76,8 @@ const JobDescription = () => {
             </div>
           </div>
           <div className=" flex gap-[24px] mt-[22px] items-center">
-            <div className="flex border rounded-lg px-4 py-2 border-[#B6B8EC] items-center bg-[#F7F7FD]">
-              <div className="flex gap-1 items-center border-r pr-2 mr-2">
-                <Image
-                  alt="like it"
-                  src={Thumbsup}
-                  className="cursor-pointer"
-                />
-                <p className="text-[12px]">1.2k</p>
-              </div>
-              <Image
-                alt="dislike it"
-                src={Thumbsdown}
-                className="cursor-pointer"
-              />
-            </div>
-            <div className="border rounded-lg px-4 py-[9px] border-[#B6B8EC] flex gap-2 bg-[#F7F7FD] items-center">
-              <Image
-                alt="comment on it"
-                src={Comment}
-                className="cursor-pointer"
-              />
-              <p className="text-[12px]">201</p>
-            </div>
+            <LikeButtons />
+            <CommentButton />
           </div>
         </div>
         <div className="border border-[#B6B8EC bg-[#FFFFFF] shadow rounded-2xl p-[30px]">

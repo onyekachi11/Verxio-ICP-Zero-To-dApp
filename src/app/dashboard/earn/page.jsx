@@ -14,6 +14,7 @@ const Page = () => {
   const [jobs, setJobs] = useState([]);
 
   const user = useSelector((state)=> state.persistedReducer.user.userValue)
+  const userProfile = useSelector((state)=> state.persistedReducer.user.userProfile)
 
 
   const list = async () => {
@@ -30,7 +31,8 @@ const Page = () => {
 
   // list()
 
-  // console.log(user)
+  console.log(user)
+  console.log(userProfile)
 
   useEffect(() => {
     if (user) {
@@ -42,7 +44,7 @@ const Page = () => {
     <>
       <div className="border p-[32px] rounded-2xl">
         <h2 className="text-primary text-[28px] font-semibold mb-[32px] capitalize">
-          Welcome back John
+          Welcome back {userProfile.firstName}
         </h2>
         {jobs?.map((item) => (
           <JobCard key={item.key} jobs={item} />
