@@ -1,13 +1,9 @@
-"use client";
-import React, { useEffect, useLayoutEffect } from "react";
+import React from "react";
 import { signOut } from "@junobuild/core";
 import Image from "next/image";
 import SignOut from "../assets/SignOut.svg";
-import { permanentRedirect, redirect } from "next/navigation";
-import { useNav } from "../context/nav_context";
 import { useDispatch } from "react-redux";
 import { setUserValue, setUserProfile } from "../../slices/userSlices";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const LogoutButton = () => {
@@ -24,7 +20,6 @@ const LogoutButton = () => {
 
   return (
     <div
-      // href="/"
       onClick={handleLogout}
       className="flex items-center mx-auto w-[70%] gap-3 cursor-pointer"
     >
