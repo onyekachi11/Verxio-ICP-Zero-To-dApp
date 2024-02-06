@@ -28,11 +28,8 @@ const Page = () => {
       console.error("Error fetching data:", error);
     }
   };
-
-  // list()
-
-  console.log(user)
-  console.log(userProfile)
+  
+  // console.log(userProfile)
 
   useEffect(() => {
     if (user) {

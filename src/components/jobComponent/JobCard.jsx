@@ -6,6 +6,8 @@ import Thumbsdown from "../../assets/thumbs-down.svg";
 import Comment from "../../assets/comment.svg";
 import Ethereum from "../../assets/ethereum.svg";
 import ICP from "../../assets/icp-logo.svg";
+import USDC from '../../assets/usdc-logo.svg'
+import USDT from '../../assets/usdt-logo.svg'
 import Solana from "../../assets/solana-logo.svg";
 import Button from "../Button";
 import { setJobDetails } from "../../../slices/jobSlice";
@@ -18,12 +20,15 @@ import LikeButtons from "../likeButtons";
 import CommentButton from "../commentButton";
 
 const JobCard = ({ jobs }) => {
-  // console.log(jobs);
-  // const { setJobDetails} = useNav();
 
   const dispatch = useDispatch();
-
   const { data } = jobs;
+
+  // console.log("see jobs", {
+  //   ...jobs.data,
+  //   taskId: jobs.key,
+  //   owner: jobs.owner
+  // })
 
   const logo = (coin) => {
     if (coin === "icp") {
@@ -32,7 +37,11 @@ const JobCard = ({ jobs }) => {
       return Ethereum;
     } else if (coin === "solana") {
       return Solana;
-    }
+    } else if (coin === 'USDT'){
+    return USDT;
+  } else if (coin === 'USDC'){
+    return USDC;
+  }
     // return null
   };
 

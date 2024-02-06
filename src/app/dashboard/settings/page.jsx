@@ -78,7 +78,6 @@ const Page = () => {
   }, [dispatch, userDetailHistory]);
 
   console.log("User Profile", userProfile);
-  console.log("userrrrrrrrrr222222222222222", user);
 
   const handleImageChange = (event) => {
     const file = event.currentTarget.files[0];
