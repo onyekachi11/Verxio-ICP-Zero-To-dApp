@@ -4,10 +4,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import Button from "../../components/Button";
 
-const Error = ({
-  error,
-  reset,
-}) => {
+const Error = ({ reset }) => {
   const router = useRouter();
   const handleGoBack = () => {
     router.back();
@@ -20,9 +17,7 @@ const Error = ({
       </h1>
       <p>We are working to fix this.</p>
       <div className="flex gap-4 items-center mt-6">
-        <Button outline onClick={reset}>
-          <span className="text-black">Try again</span>
-        </Button>
+        <Button outline onClick={reset} name="Try Again" />
         <Button onClick={handleGoBack}>Go back</Button>
       </div>
     </section>
