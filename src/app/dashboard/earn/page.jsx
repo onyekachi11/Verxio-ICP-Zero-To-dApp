@@ -17,28 +17,28 @@ const Page = () => {
   const userProfile = useSelector((state)=> state.persistedReducer.user.userProfile)
 
 
-  const list = async () => {
-    try {
-      const { items } = await listDocs({
-        collection: "publish-task",
-      });
-      setJobs(items);
+  // const list = async () => {
+  //   try {
+  //     const { items } = await listDocs({
+  //       collection: "publish-task",
+  //     });
+  //     setJobs(items);
 
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
 
-  // list()
+  // // list()
 
-  console.log(user)
-  console.log(userProfile)
+  // console.log(user)
+  // console.log(userProfile)
 
-  useEffect(() => {
-    if (user) {
-      list()
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user) {
+  //     list()
+  //   }
+  // }, [user]);
 
   return (
     <>
@@ -46,9 +46,9 @@ const Page = () => {
         <h2 className="text-primary text-[28px] font-semibold mb-[32px] capitalize">
           Welcome back {userProfile.firstName}
         </h2>
-        {jobs?.map((item) => (
+        {/* {jobs?.map((item) => (
           <JobCard key={item.key} jobs={item} />
-        ))}
+        ))} */}
       </div>
     </>
   );
