@@ -1,6 +1,6 @@
 
 import React from "react";
-import { signIn } from "@junobuild/core";
+import { signIn } from "@junobuild/core-peer";
 import Image from "next/image";
 import SignOut from "../assets/SignOut.svg";
 
