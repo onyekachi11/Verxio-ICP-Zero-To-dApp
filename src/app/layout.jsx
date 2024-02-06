@@ -20,13 +20,13 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.variable} font-inter`}>
-        <NavProvider>
+        {/* <NavProvider> */}
           <AppRouterCacheProvider>
             <JunoProvider>
               <ReduxProvider>{children}</ReduxProvider>
             </JunoProvider>
           </AppRouterCacheProvider>
-        </NavProvider>
+        {/* </NavProvider> */}
       </body>
     </html>
   );
