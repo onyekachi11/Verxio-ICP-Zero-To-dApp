@@ -1,14 +1,14 @@
 "use client";
 
 import JobCard from "../../../components/jobComponent/JobCard";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { listDocs } from "@junobuild/core";
-import { authSubscribe } from "@junobuild/core";
+// import { authSubscribe } from "@junobuild/core";
 
-import { AuthContext } from "../../../components/auth";
-import { useNav } from "../../../context/nav_context";
-import { root } from "../../../../store";
+// import { AuthContext } from "../../../components/auth";
+// import { useNav } from "../../../context/nav_context";
+// import { root } from "../../../../store";
 
 const Page = () => {
   const [jobs, setJobs] = useState([]);
