@@ -1,7 +1,4 @@
-"use client";
-
-import React, { useEffect } from "react";
-import Button from "../components/Button";
+import React from "react";
 
 import HomeHeader from "../components/homePage/homeHeader";
 import SecondSection from "../components/homePage/secondSection";

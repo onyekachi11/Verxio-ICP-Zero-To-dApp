@@ -1,17 +1,14 @@
 "use client";
-import { useEffect, useState } from "react";
-import { authSubscribe } from "@junobuild/core";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Button from "../../../components/Button";
 import * as Yup from "yup";
 import { uploadFile, setDoc } from "@junobuild/core";
 import { nanoid } from "nanoid";
-import { LoadingButton } from '@mui/lab';
 import { useSelector } from "react-redux";
 
 const Page = () => {
 
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
     const userProfile = useSelector(
       (state) => state.persistedReducer.user.userProfile
@@ -225,21 +222,6 @@ const Page = () => {
                   }
                 }}
               />
-              {/* <LoadingButton
-                type="submit"
-                variant="contained"
-                // color="primary"
-                className="mt-8 w-full"
-                loading={loading}
-                onClick={() => {
-                  if (isValid && dirty) {
-                    submitValue(values);
-                    setLoading(true);
-                  }
-                }}
-              >
-                Submit
-              </LoadingButton> */}
             </div>
           </Form>
         )}

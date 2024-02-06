@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect } from "react";
 import { signIn, initJuno, authSubscribe } from "@junobuild/core";
 import { useDispatch, useSelector } from "react-redux";
