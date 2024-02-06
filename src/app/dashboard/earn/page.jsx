@@ -3,7 +3,7 @@
 import JobCard from "../../../components/jobComponent/JobCard";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { listDocs } from "@junobuild/core";
+// import { listDocs } from "@junobuild/core";
 // import { authSubscribe } from "@junobuild/core";
 
 // import { AuthContext } from "../../../components/auth";
@@ -44,7 +44,8 @@ const Page = () => {
     <>
       <div className="border p-[32px] rounded-2xl">
         <h2 className="text-primary text-[28px] font-semibold mb-[32px] capitalize">
-          Welcome back {userProfile.firstName}
+          {/* Welcome back {userProfile.firstName} */}
+          hello
         </h2>
         {/* {jobs?.map((item) => (
           <JobCard key={item.key} jobs={item} />
