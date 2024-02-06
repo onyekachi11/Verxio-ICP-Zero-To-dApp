@@ -1,6 +1,4 @@
 import React from "react";
-import img from '../../../assets/settings-hero.png'
-// import { url } from "inspector";
 
 const layout = ({ children }) => {
   return (

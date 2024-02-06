@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
-import { signIn, initJuno, authSubscribe } from "@junobuild/core";
+"use client";
+import React, { useEffect, useLayoutEffect } from "react";
+import { signIn, authSubscribe, initJuno } from "@junobuild/core-peer";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserValue } from "../../../slices/userSlices";
-import { useNav } from "../../context/nav_context";
-import { redirect } from "next/navigation";
+// import { useNav } from "../../context/nav_context";
+// import { redirect } from "next/navigation";
 import { useRouter } from "next/navigation";
 import Button from "../Button";
 import { Logo } from "../atoms";
@@ -41,6 +42,12 @@ const HomeHeader = () => {
       unsubscribe();
     };
   }, [dispatch]);
+
+  // useLayoutEffect(() => {
+  //   if (!user?.key) {
+  //     router.push("/");
+  //   }
+  // });
 
   const handleLogin = async () => {
     if (user?.key) {

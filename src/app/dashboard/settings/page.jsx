@@ -1,11 +1,11 @@
 "use client";
 import { useContext, useEffect, useState, React, useRef } from "react";
-import { authSubscribe, initJuno, listDocs } from "@junobuild/core";
+import { authSubscribe, initJuno, listDocs } from "@junobuild/core-peer";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Button from "../../../components/Button";
 import Edit from "../../../assets/edit.svg";
 import * as Yup from "yup";
-import { uploadFile, setDoc } from "@junobuild/core";
+import { uploadFile, setDoc } from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
 import { LoadingButton } from "@mui/lab";
 import Image from "next/image";
