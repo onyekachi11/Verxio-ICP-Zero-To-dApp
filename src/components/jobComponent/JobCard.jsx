@@ -1,18 +1,11 @@
-"use client"
+// "use client"
 import Image from "next/image";
-import React, { useState, useEffect } from "react";
-import Thumbsup from "../../assets/thumbs-up.svg";
-import Thumbsdown from "../../assets/thumbs-down.svg";
-import Comment from "../../assets/comment.svg";
+import React from "react";
 import Ethereum from "../../assets/ethereum.svg";
 import ICP from "../../assets/icp-logo.svg";
 import Solana from "../../assets/solana-logo.svg";
 import Button from "../Button";
 import { setJobDetails } from "../../../slices/jobSlice";
-import Link from "next/link";
-import { listDocs } from "@junobuild/core";
-import { authSubscribe } from "@junobuild/core";
-import { useNav } from "../../context/nav_context";
 import { useSelector, useDispatch } from "react-redux";
 import LikeButtons from "../likeButtons";
 import CommentButton from "../commentButton";

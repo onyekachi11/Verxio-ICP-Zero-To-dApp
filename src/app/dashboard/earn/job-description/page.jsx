@@ -1,6 +1,6 @@
 // import JobCard from '@/components/jobComponent/JobCard';
-import JobDescription from '../../../../components/jobComponent/jobDescription';
 import React from 'react'
+import JobDescription from '../../../../components/jobComponent/jobDescription';
 
 const page = () => {
   return (

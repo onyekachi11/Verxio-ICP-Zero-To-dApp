@@ -3,6 +3,7 @@ import { Lato, Poppins, Inter } from "next/font/google";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import ReduxProvider from "../components/reduxProvider";
 import { NavProvider } from "../context/nav_context";
+import JunoProvider from "../components/junoProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -16,13 +17,14 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  // const session = await getServerSession(authOptions);
   return (
     <html lang="en">
       <body className={`${inter.variable} font-inter`}>
         <NavProvider>
           <AppRouterCacheProvider>
-            <ReduxProvider>{children}</ReduxProvider>
+            <JunoProvider>
+              <ReduxProvider>{children}</ReduxProvider>
+            </JunoProvider>
           </AppRouterCacheProvider>
         </NavProvider>
       </body>
