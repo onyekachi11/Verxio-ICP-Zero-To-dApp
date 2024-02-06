@@ -21,9 +21,9 @@ export default async function RootLayout({ children }) {
     <html lang="en">
       <body className={`${inter.variable} font-inter`}>
         <NavProvider>
-          <ReduxProvider>
-            <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
-          </ReduxProvider>
+          <AppRouterCacheProvider>
+            <ReduxProvider>{children}</ReduxProvider>
+          </AppRouterCacheProvider>
         </NavProvider>
       </body>
     </html>

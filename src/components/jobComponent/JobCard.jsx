@@ -28,7 +28,7 @@ const JobCard = ({ jobs }) => {
   // console.log(jobDetailss)
 
   const { data } = jobs;
-  console.log("Data", data)
+  // console.log("Data", data)
 
   const logo = (coin) => {
     if (coin === "icp") {

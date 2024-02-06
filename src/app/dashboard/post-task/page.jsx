@@ -7,19 +7,21 @@ import * as Yup from "yup";
 import { uploadFile, setDoc } from "@junobuild/core";
 import { nanoid } from "nanoid";
 import { LoadingButton } from '@mui/lab';
+import { useSelector } from "react-redux";
 
 const Page = () => {
-  const [user, setUser] = useState();
+
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const unsubscribe = authSubscribe((newUser) => {
-      setUser(newUser);
-    });
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+    const userProfile = useSelector(
+      (state) => state.persistedReducer.user.userProfile
+    );
+
+    const user = useSelector(
+      (state) => state.persistedReducer.user.userValue
+    );
+
+    console.log(user,userProfile)
 
   const initialValues = {
     title: "",

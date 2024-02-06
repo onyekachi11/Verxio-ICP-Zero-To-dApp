@@ -1,21 +1,24 @@
 "use client";
-import { permanentRedirect } from "next/navigation";
-import { useEffect } from "react";
-import { initJuno } from "@junobuild/core-peer";
-import { useNav } from "../context/nav_context";
-// import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 
-export default function Profile() {
-  const { user } = useNav();
+import React, { useEffect } from "react";
+import Button from "../components/Button";
 
-  useEffect(() => {
-    (async () =>
-      await initJuno({
-        satelliteId: "tw7oh-ryaaa-aaaal-adoya-cai",
-      }))();
-  }, []);
+import HomeHeader from "../components/homePage/homeHeader";
+import SecondSection from "../components/homePage/secondSection";
+import WalletCardSection from "../components/homePage/walletCards";
+import AdvancedFeaturesSection from "../components/homePage/advancedFeatures";
 
+const Home = () => {
+  return (
+    <div className="w-full h-full bg-primary text-white  ">
+      <div className="h-full overflow-scroll">
+        <HomeHeader />
+        <SecondSection />
+        <WalletCardSection />
+        <AdvancedFeaturesSection/>
+      </div>
+    </div>
+  );
+};
 
-  permanentRedirect("/dashboard/earn");
-
-}
+export default Home;

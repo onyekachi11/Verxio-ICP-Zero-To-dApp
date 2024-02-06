@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage";
 import {
@@ -12,6 +12,7 @@ import {
   REGISTER,
 } from "redux-persist";
 import jobReducer from "./slices/jobSlice";
+import userReducer from "./slices/userSlices";
 
 const persistConfig = {
   key: "root",
@@ -20,14 +21,15 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   jobValues: jobReducer,
+  user: userReducer,
 });
 
-const persistedReducers = persistReducer(persistConfig, rootReducer);
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
   reducer: {
-    persistedReducer: persistedReducers,
-  },
+    persistedReducer,
+  },  
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
@@ -36,6 +38,6 @@ const store = configureStore({
     }),
 });
 
-export const root = store.getState()
+export const root = store.getState();
 export const persistor = persistStore(store);
 export default store;

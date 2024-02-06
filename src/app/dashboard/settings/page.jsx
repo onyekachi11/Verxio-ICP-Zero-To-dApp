@@ -1,6 +1,6 @@
 "use client";
-import { useContext, useEffect, useState,  React, useRef } from "react";
-import { authSubscribe, listDocs } from "@junobuild/core";
+import { useContext, useEffect, useState, React, useRef } from "react";
+import { authSubscribe, initJuno, listDocs } from "@junobuild/core";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Button from "../../../components/Button";
 import Edit from "../../../assets/edit.svg";
@@ -9,23 +9,40 @@ import { uploadFile, setDoc } from "@junobuild/core";
 import { nanoid } from "nanoid";
 import { LoadingButton } from "@mui/lab";
 import Image from "next/image";
+import { useNav } from "../../../context/nav_context";
+import { useSelector, useDispatch } from "react-redux";
+import { root } from "../../../../store";
+import { setUserProfile } from "../../../../slices/userSlices";
 
 const Page = () => {
-  const [user, setUser] = useState();
-  const [userDetailHistory, setuserDetailHistory] = useState([])
-  const [userProfile, setuserProfile] = useState()
+  const user = useSelector((state) => state.persistedReducer.user.userValue);
+  const userProfile = useSelector(
+    (state) => state.persistedReducer.user.userProfile
+  );
+
+  const dispatch = useDispatch();
+
+  const [userDetailHistory, setuserDetailHistory] = useState([]);
+  // const [userProfile, setuserProfile] = useState();
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [profileImg, setProfileImg] = useState(null);
 
   const fileInputRef = useRef(null);
 
   useEffect(() => {
-    const unsubscribe = authSubscribe((newUser) => {
-      setUser(newUser);
-    });
-    return () => {
-      unsubscribe();
+    const initializeJuno = async () => {
+      try {
+        await initJuno({
+          satelliteId: "tw7oh-ryaaa-aaaal-adoya-cai",
+        });
+      } catch (error) {
+        console.error("Error initializing Juno:", error);
+        // Handle the error, e.g., show a user-friendly message or redirect to an error page.
+      }
     };
+
+    initializeJuno();
   }, []);
 
   const list = async () => {
@@ -33,6 +50,7 @@ const Page = () => {
       const { items } = await listDocs({
         collection: "userProfile-details",
       });
+      console.log(items);
       setuserDetailHistory(items);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -45,20 +63,26 @@ const Page = () => {
     }
   }, [user]);
 
-  const lastUserDetails = userDetailHistory[0];
-  let userProfileDetails;
-// Check if the object is not null or undefined
-  if (typeof lastUserDetails === 'object') {
-        userProfileDetails = {
-        ...lastUserDetails.data,
-        owner: lastUserDetails.owner 
-    };
-    } 
-  
-  console.log("User Profile", userProfileDetails);
+  // user && list();
+
+  useEffect(() => {
+    const lastUserDetails = userDetailHistory[0];
+    if (typeof lastUserDetails === "object") {
+      dispatch(
+        setUserProfile({
+          ...lastUserDetails.data,
+          owner: lastUserDetails.owner,
+        })
+      );
+    }
+  }, [dispatch, userDetailHistory]);
+
+  console.log("User Profile", userProfile);
+  console.log("userrrrrrrrrr222222222222222", user);
 
   const handleImageChange = (event) => {
-    const file = event.target.files[0];
+    const file = event.currentTarget.files[0];
+    setProfileImg(file);
 
     if (file) {
       const reader = new FileReader();
@@ -98,11 +122,12 @@ const Page = () => {
   });
 
   const submitValue = async (values) => {
-      {
-      console.log("Image Profile: ", selectedImage)
+    setLoading(true);
+    {
+      console.log("Image Profile: ", profileImg);
       console.log("Form values:", values);
       console.log("Uploading Files...");
-      let url; 
+      let url;
       let ImageUrl;
       try {
         // Handle file upload logic
@@ -116,33 +141,33 @@ const Page = () => {
           url = downloadUrl;
         }
 
-        if (profileImageDoc !== undefined) {
-          const filename = `${user.key}-${profileImageDoc.name}`;
+        if (profileImg !== undefined) {
+          const filename = `${user.key}-${profileImg.name}`;
           const { downloadUrl } = await uploadFile({
             collection: "userProfile-photo",
-            data: profileImageDoc,
+            data: profileImg,
             filename,
           });
           ImageUrl = downloadUrl;
         }
 
         // Access the download URL and other form values here
-          console.log("Stored on the Juno Storage...");
-          console.log("Download URL:", url);
+        console.log("Stored on the Juno Storage...");
+        console.log("Download URL:", url);
 
         await setDoc({
           collection: "userProfile-details",
           doc: {
             key: nanoid(),
             data: {
-            firstName: values.firstName,
-            lastName: values.lastName,
-            bio: values.bio,
-            email: values.email,
-            phoneNumber: values.phoneNumber,
-            website: values.website,
-            fileDoc: url,
-            profileImageDoc: ImageUrl
+              firstName: values.firstName,
+              lastName: values.lastName,
+              bio: values.bio,
+              email: values.email,
+              phoneNumber: values.phoneNumber,
+              website: values.website,
+              fileDoc: url,
+              profileImageDoc: ImageUrl,
             },
           },
         });
@@ -154,9 +179,8 @@ const Page = () => {
         console.error("Upload Error:", error);
       }
     }
+    setLoading(false);
   };
-
-
 
   return (
     <>
@@ -181,7 +205,7 @@ const Page = () => {
         <input
           name="profileImageDoc"
           type="file"
-          capture="environment"
+          // capture="environment"
           className="hidden"
           accept="image/*"
           ref={fileInputRef}
@@ -269,7 +293,7 @@ const Page = () => {
                 <ErrorMessage name="fileDoc" component={Error} />
               </div>
               <div>
-                <Button
+                {/* <Button
                   type="submit"
                   name="Update Profile"
                   className="mt-8 w-full "
@@ -279,22 +303,22 @@ const Page = () => {
                       submitValue(values);
                     }
                   }}
-                />
-                {/* <LoadingButton
-                type="submit"
-                variant="contained"
-                // color="primary"
-                className="mt-8 w-full"
-                loading={loading}
-                onClick={() => {
-                  if (isValid && dirty) {
-                    submitValue(values);
-                    setLoading(true);
-                  }
-                }}
+                /> */}
+                <LoadingButton
+                  type="submit"
+                  variant="contained"
+                  // color="primary"
+                  className="mt-8 w-full"
+                  loading={loading}
+                  onClick={() => {
+                    if (isValid && dirty) {
+                      submitValue(values);
+                      // setLoading(true);
+                    }
+                  }}
                 >
-                Submit
-              </LoadingButton> */}
+                  Submit
+                </LoadingButton>
               </div>
             </Form>
           )}
