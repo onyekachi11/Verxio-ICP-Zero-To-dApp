@@ -12,13 +12,16 @@ import Image from "next/image";
 import { useNav } from "../../../context/nav_context";
 import { useSelector, useDispatch } from "react-redux";
 import { root } from "../../../../store";
-import { setUserProfile } from "../../../../slices/userSlices";
+import { setEditUser, setUserProfile } from "../../../../slices/userSlices";
+import Link from "next/link";
 
 const Page = () => {
   const user = useSelector((state) => state.persistedReducer.user.userValue);
   const userProfile = useSelector(
     (state) => state.persistedReducer.user.userProfile
   );
+  const edit = useSelector((state) => state.persistedReducer.user.editUser);
+  console.log(edit)
 
   const dispatch = useDispatch();
 
@@ -26,9 +29,12 @@ const Page = () => {
   // const [userProfile, setuserProfile] = useState();
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [profileImg, setProfileImg] = useState(null);
+  const [profileImg, setProfileImg] = useState(userProfile.profilePicUrl || '');
+  // const [edit, setEdit] = useState(false);
 
   const fileInputRef = useRef(null);
+
+  console.log(userProfile);
 
   useEffect(() => {
     const initializeJuno = async () => {
@@ -63,21 +69,17 @@ const Page = () => {
     }
   }, [user]);
 
-  // user && list();
-
-  useEffect(() => {
-    const lastUserDetails = userDetailHistory[0];
-    if (typeof lastUserDetails === "object") {
-      dispatch(
-        setUserProfile({
-          ...lastUserDetails.data,
-          owner: lastUserDetails.owner,
-        })
-      );
-    }
-  }, [dispatch, userDetailHistory]);
-
-  console.log("User Profile", userProfile);
+  // useEffect(() => {
+  //   const lastUserDetails = userDetailHistory[0];
+  //   if (typeof lastUserDetails === "object") {
+  //     dispatch(
+  //       setUserProfile({
+  //         ...lastUserDetails.data,
+  //         owner: lastUserDetails.owner,
+  //       })
+  //     );
+  //   }
+  // }, [dispatch, userDetailHistory]);
 
   const handleImageChange = (event) => {
     const file = event.currentTarget.files[0];
@@ -99,15 +101,17 @@ const Page = () => {
   };
 
   const initialValues = {
-    firstName: "",
-    lastName: "",
-    bio: "",
-    email: "",
-    phoneNumber: "",
-    website: "",
-    fileDoc: "",
-    profileImageDoc: "",
+    firstName: userProfile?.firstName || "",
+    lastName: userProfile?.lastName || "",
+    bio: userProfile?.bio || "",
+    email: userProfile?.email || "",
+    phoneNumber: userProfile?.phoneNumber || "",
+    website: userProfile?.website || "",
+    fileDoc: userProfile.powUrl || "",
+    profileImageDoc: userProfile.profilePicUrl || "",
   };
+
+  console.log(initialValues.profileImageDoc)
 
   const validationchema = Yup.object().shape({
     firstName: Yup.string().required("First name is required"),
@@ -123,14 +127,11 @@ const Page = () => {
   const submitValue = async (values) => {
     setLoading(true);
     {
-      console.log("Image Profile: ", profileImg);
-      console.log("Form values:", values);
-      console.log("Uploading Files...");
       let url;
       let ImageUrl;
       try {
         // Handle file upload logic
-        if (values.fileDoc !== undefined) {
+        if (values.fileDoc == '') {
           const filename = `${user.key}-${values.fileDoc.name}`;
           const { downloadUrl } = await uploadFile({
             collection: "userProfile-document",
@@ -140,7 +141,7 @@ const Page = () => {
           url = downloadUrl;
         }
 
-        if (profileImg !== undefined) {
+        if (profileImg == '') {
           const filename = `${user.key}-${profileImg.name}`;
           const { downloadUrl } = await uploadFile({
             collection: "userProfile-photo",
@@ -150,30 +151,35 @@ const Page = () => {
           ImageUrl = downloadUrl;
         }
 
-        // Access the download URL and other form values here
-        console.log("Stored on the Juno Storage...");
-        console.log("Download URL:", url);
+        console.log(url, ImageUrl);
 
-        await setDoc({
-          collection: "userProfile-details",
-          doc: {
-            key: nanoid(),
-            data: {
-              firstName: values.firstName,
-              lastName: values.lastName,
-              bio: values.bio,
-              email: values.email,
-              phoneNumber: values.phoneNumber,
-              website: values.website,
-              fileDoc: url,
-              profileImageDoc: ImageUrl,
+        const value = {
+          _id: user.owner ,
+          firstName: values.firstName,
+          lastName: values.lastName,
+          bio: values.bio,
+          email: values.email,
+          phoneNumber: values.phoneNumber,
+          website: values.website,
+          powUrl: url || userProfile.powUrl,
+          profilePicUrl: ImageUrl || userProfile.profilePicUrl,
+        };
+
+        const response = await fetch(
+          `https://verxio-backend.vercel.app/api/v1/profiles`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
             },
-          },
-        });
-
-        console.log("Profile upload successful!...");
-
-        // Now you can perform additional submit logic, e.g., send data to the server
+            body: JSON.stringify(value),
+          }
+        );
+        const data = await response.json();
+        console.log("Profile updated successfully:", data);
+        dispatch(setUserProfile(data.user))
+        dispatch(setEditUser(false))
+        // Handle success response here
       } catch (error) {
         console.error("Upload Error:", error);
       }
@@ -187,7 +193,7 @@ const Page = () => {
         <div className="w-[200px] h-[200px] bg-slate-500  border-[8px] border-white rounded-full absolute -top-[100px]">
           {selectedImage && (
             <Image
-              src={selectedImage}
+              src={userProfile?.profilePicUrl}
               alt="profile picture"
               width={200}
               height={200}
@@ -218,106 +224,214 @@ const Page = () => {
           validationSchema={validationchema}
         >
           {({ isValid, handleSubmit, values, dirty, setFieldValue }) => (
-            <Form className="mt-8 flex flex-col gap-5 w-[80%] ">
-              <div className="flex flex-col gap-3 text-16 ">
-                <label htmlFor="firstName">First Name</label>
-                <Field
-                  name="firstName"
-                  placeholder="John"
-                  className="border outline-none rounded-[4px] border-black p-2"
-                />
-                <ErrorMessage name="firstName" component={Error} />
+            <Form className={` mt-16  w-[80%] `}>
+              <div
+                className={`${
+                  !edit && "grid grid-cols-2 mt-16"
+                } flex flex-col gap-5 mb-5 mt-5`}
+              >
+                <div className="flex flex-col gap-3 text-16">
+                  <label
+                    htmlFor="firstName"
+                    className={`${
+                      !edit &&
+                      "text-[19px] font-semibold text-gray-800 mb-[-10px]"
+                    }`}
+                  >
+                    First Name
+                  </label>
+                  {edit ? (
+                    <Field
+                      name="firstName"
+                      placeholder="John"
+                      className="border outline-none rounded-[4px] border-black p-2"
+                    />
+                  ) : (
+                    <p className="text-[17px] text-black capitalize">
+                      {userProfile.firstName}
+                    </p>
+                  )}
+                  <ErrorMessage name="firstName" component={Error} />
+                </div>
+                <div className="flex flex-col gap-3 text-16 ">
+                  <label
+                    htmlFor="lastName"
+                    className={`${
+                      !edit &&
+                      "text-[19px] font-semibold text-gray-800 mb-[-10px]"
+                    }`}
+                  >
+                    Last Name
+                  </label>
+                  {edit ? (
+                    <Field
+                      placeholder="Doe"
+                      name="lastName"
+                      className="border outline-none rounded-[4px] border-black p-2"
+                    />
+                  ) : (
+                    <p className="text-[17px] text-black capitalize">
+                      {userProfile.lastName}
+                    </p>
+                  )}
+                  <ErrorMessage name="lastName" component={Error} />
+                </div>
+                <div className="flex flex-col gap-3 text-16 ">
+                  <label
+                    htmlFor="bio"
+                    className={`${
+                      !edit &&
+                      "text-[19px] font-semibold text-gray-800 mb-[-10px]"
+                    }`}
+                  >
+                    Bio
+                  </label>
+                  {edit ? (
+                    <Field
+                      placeholder="Tell us about you"
+                      name="bio"
+                      as="textarea"
+                      className="border outline-none rounded-[4px] border-black p-2 max-h-[90px]"
+                    />
+                  ) : (
+                    <p className="text-[17px] text-black ">{userProfile.bio}</p>
+                  )}
+                </div>
+                <div className="flex flex-col gap-3 text-16 ">
+                  <label
+                    htmlFor="email"
+                    className={`${
+                      !edit && "text-[19px] font-semibold text-black mb-[-10px]"
+                    }`}
+                  >
+                    Contact Email
+                  </label>
+                  {edit ? (
+                    <Field
+                      placeholder="johndoe@gmail.com"
+                      name="email"
+                      className="border outline-none rounded-[4px] border-black p-2"
+                    />
+                  ) : (
+                    <p className="text-[17px] text-black">
+                      {userProfile.email}
+                    </p>
+                  )}
+                  <ErrorMessage name="email" component={Error} />
+                </div>
+                <div className="flex flex-col gap-3 text-16 ">
+                  <label
+                    htmlFor="phoneNumber"
+                    className={`${
+                      !edit &&
+                      "text-[19px] font-semibold text-gray-800 mb-[-10px]"
+                    }`}
+                  >
+                    Phone Number
+                  </label>
+                  {edit ? (
+                    <Field
+                      placeholder="123-456-7890"
+                      name="phoneNumber"
+                      className="border outline-none rounded-[4px] border-black p-2"
+                    />
+                  ) : (
+                    <p className="text-[17px] text-black capitalize">
+                      {userProfile.phoneNumber}
+                    </p>
+                  )}
+                  <ErrorMessage name="phoneNumber" component={Error} />
+                </div>
+                <div className="flex flex-col gap-3 text-16 ">
+                  <label
+                    htmlFor="website"
+                    className={`${
+                      !edit &&
+                      "text-[19px] font-semibold text-gray-800 mb-[-10px]"
+                    }`}
+                  >
+                    Website
+                  </label>
+                  {edit ? (
+                    <Field
+                      placeholder="www.insertyourlink.com"
+                      name="website"
+                      className="border outline-none rounded-[4px] border-black p-2"
+                    />
+                  ) : (
+                    userProfile.website && (
+                      <Link
+                        href={userProfile?.website}
+                        className="text-[17px] text-black"
+                      >
+                        {userProfile.website}
+                      </Link>
+                    )
+                  )}
+                  <ErrorMessage name="website" component={Error} />
+                </div>
+                <div className="flex flex-col gap-3 text-16 ">
+                  <label
+                    htmlFor="fileDoc"
+                    className={`${
+                      !edit &&
+                      "text-[19px] font-semibold text-gray-800 mb-[-10px]"
+                    }`}
+                  >
+                    Upload file (doc, pdf, png, jpg, etc.)
+                  </label>
+                  {edit ? (
+                    <input
+                      name="fileDoc"
+                      className="border outline-none rounded-[4px] border-black p-2"
+                      type="file"
+                      onChange={(event) =>
+                        setFieldValue("fileDoc", event.currentTarget.files[0])
+                      }
+                    />
+                  ) : (
+                    userProfile.powUrl && (
+                      <Link
+                        href={userProfile?.powUrl}
+                        className="border p-3 bg-white shadow-md font-semibold mt-3"
+                      >
+                        Uploaded Document
+                      </Link>
+                    )
+                  )}
+                  <ErrorMessage name="fileDoc" component={Error} />
+                </div>
               </div>
-              <div className="flex flex-col gap-3 text-16 ">
-                <label htmlFor="lastName">Last Name</label>
-                <Field
-                  placeholder="Doe"
-                  name="lastName"
-                  className="border outline-none rounded-[4px] border-black p-2"
-                />
-                <ErrorMessage name="lastName" component={Error} />
-              </div>
-
-              <div className="flex flex-col gap-3 text-16 ">
-                <label htmlFor="bio">Bio</label>
-                <Field
-                  placeholder="Tell us about you"
-                  name="bio"
-                  as="textarea"
-                  className="border outline-none rounded-[4px] border-black p-2 max-h-[90px]"
-                />
-              </div>
-
-              <div className="flex flex-col gap-3 text-16 ">
-                <label htmlFor="email">Contact Email</label>
-                <Field
-                  placeholder="johndoe@gmail.com"
-                  name="email"
-                  className="border outline-none rounded-[4px] border-black p-2"
-                />
-                <ErrorMessage name="email" component={Error} />
-              </div>
-
-              <div className="flex flex-col gap-3 text-16 ">
-                <label htmlFor="phoneNumber">Phone Number</label>
-                <Field
-                  placeholder="123-456-7890"
-                  name="phoneNumber"
-                  className="border outline-none rounded-[4px] border-black p-2"
-                />
-                <ErrorMessage name="phoneNumber" component={Error} />
-              </div>
-              <div className="flex flex-col gap-3 text-16 ">
-                <label htmlFor="website">Website</label>
-                <Field
-                  placeholder="www.insertyourlink.com"
-                  name="website"
-                  className="border outline-none rounded-[4px] border-black p-2"
-                />
-                <ErrorMessage name="website" component={Error} />
-              </div>
-
-              <div className="flex flex-col gap-3 text-16 ">
-                <label htmlFor="fileDoc">
-                  Upload file (doc, pdf, png, jpg, etc.)
-                </label>
-                <input
-                  name="fileDoc"
-                  className="border outline-none rounded-[4px] border-black p-2"
-                  type="file"
-                  onChange={(event) =>
-                    setFieldValue("fileDoc", event.currentTarget.files[0])
-                  }
-                />
-                <ErrorMessage name="fileDoc" component={Error} />
-              </div>
-              <div>
-                {/* <Button
-                  type="submit"
-                  name="Update Profile"
-                  className="mt-8 w-full "
-                  onClick={() => {
-                    if (isValid && dirty) {
-                      // console.log(values);
-                      submitValue(values);
-                    }
-                  }}
-                /> */}
-                <LoadingButton
-                  type="submit"
-                  variant="contained"
-                  // color="primary"
-                  className="mt-8 w-full"
-                  loading={loading}
-                  onClick={() => {
-                    if (isValid && dirty) {
-                      submitValue(values);
-                      // setLoading(true);
-                    }
-                  }}
-                >
-                  Submit
-                </LoadingButton>
+              <div className="flex gap-4 mt-10">
+                {edit && (
+                  <Button
+                    name="cancel"
+                    className="w-[50%]"
+                    type="button"
+                    onClick={() => dispatch(setEditUser(false))}
+                  />
+                )}
+                <div className="w-[100%]">
+                  <Button
+                    type="button"
+                    // color="primary"
+                    className="w-full"
+                    isLoading={loading}
+                    onClick={() => {
+                      if (edit) {
+                        if (isValid && dirty) {
+                          submitValue(values);
+                          console.log(values);
+                          console.log(profileImg);
+                          // setLoading(true);
+                        }
+                      } else {
+                        dispatch(setEditUser(true));
+                      }
+                    }}
+                    name={!edit ? "Edit" : "Submit"}
+                  />
+                </div>
               </div>
             </Form>
           )}
