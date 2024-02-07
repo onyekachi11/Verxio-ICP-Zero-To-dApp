@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import { initJuno, authSubscribe } from "@junobuild/core";
+import { initJuno, authSubscribe } from "@junobuild/core-peer";
 import { Logo, SidebarMenuItem } from "./atoms";
 import Image from "next/image";
 import AxiosLogo from "../assets/AxiosLogo.svg";

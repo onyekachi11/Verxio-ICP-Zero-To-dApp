@@ -1,6 +1,6 @@
 "use client";
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import storage from "redux-persist/lib/storage";
+// import storage from "redux-persist/lib/storage";
 import {
   persistReducer,
   persistStore,
@@ -13,6 +13,28 @@ import {
 } from "redux-persist";
 import jobReducer from "./slices/jobSlice";
 import userReducer from "./slices/userSlices";
+
+import createWebStorage from "redux-persist/lib/storage/createWebStorage";
+
+const createNoopStorage = () => {
+  return {
+    getItem(_key) {
+      return Promise.resolve(null);
+    },
+    setItem(_key, value) {
+      return Promise.resolve(value);
+    },
+    removeItem(_key) {
+      return Promise.resolve();
+    },
+  };
+};
+
+const storage =
+  typeof window !== "undefined"
+    ? createWebStorage("local")
+    : createNoopStorage();
+
 
 const persistConfig = {
   key: "root",

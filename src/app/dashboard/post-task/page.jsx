@@ -2,7 +2,7 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Button from "../../../components/Button";
 import * as Yup from "yup";
-import { uploadFile, setDoc } from "@junobuild/core";
+import { uploadFile, setDoc } from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
 import { useSelector } from "react-redux";
 
@@ -237,3 +237,4 @@ export default Page;
 const Error = ({ children }) => {
   return <p className="text-red-400  text-[12px] mt-[-5px]">{children}</p>;
 };
+
