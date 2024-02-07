@@ -8,8 +8,6 @@ import { useSelector } from "react-redux";
 
 const Page = () => {
 
-  // const [loading, setLoading] = useState(false);
-
     const userProfile = useSelector(
       (state) => state.persistedReducer.user.userProfile
     );
@@ -18,13 +16,12 @@ const Page = () => {
       (state) => state.persistedReducer.user.userValue
     );
 
-    console.log(user,userProfile)
-
   const initialValues = {
     title: "",
     description: "",
     responsibilities: "",
     requirements: "",
+    reward: "",
     jobType: "",
     paymentMethod: "",
     totalPeople: "",
@@ -35,7 +32,9 @@ const Page = () => {
   const validationchema = Yup.object().shape({
     title: Yup.string().required("Title is required"),
     description: Yup.string().required("Description is required"),
+    responsibilities: Yup.string().required("Responsibilities is required"),
     requirements: Yup.string().required("Requirement is required"),
+    reward: Yup.string().required("Reward is required"),
     jobType: Yup.string().required("Job type is required"),
     paymentMethod: Yup.string().required("Please select payment method"),
     totalPeople: Yup.number("value must be a number").required(
@@ -77,6 +76,7 @@ const Page = () => {
               description: values.description,
               responsibilities: values.responsibilities,
               requirements: values.requirements,
+              rewardStructure: values.reward,
               jobType: values.jobType,
               paymentMethod: values.paymentMethod,
               totalPeople: values.totalPeople,
@@ -124,7 +124,7 @@ const Page = () => {
               <label htmlFor="description">Enter Task Description</label>
               <Field
                 name="description"
-                className="border outline-none rounded-[4px] border-black p-2"
+                className="border outline-none rounded-[4px] border-black p-2 max-h-[90px]"
               />
               <ErrorMessage name="description" component={Error} />
             </div>
@@ -138,6 +138,7 @@ const Page = () => {
                 as="textarea"
                 className="border outline-none rounded-[4px] border-black p-2 max-h-[90px]"
               />
+              <ErrorMessage name="responsibilities" component={Error} />
             </div>
 
             <div className="flex flex-col gap-3 text-16 ">
@@ -148,6 +149,16 @@ const Page = () => {
                 className="border outline-none rounded-[4px] border-black p-2 max-h-[90px]"
               />
               <ErrorMessage name="requirements" component={Error} />
+            </div>
+
+            <div className="flex flex-col gap-3 text-16 ">
+              <label htmlFor="requirements">How Will Reward Be Shared?</label>
+              <Field
+                as="textarea"
+                name="reward"
+                className="border outline-none rounded-[4px] border-black p-2 max-h-[90px]"
+              />
+              <ErrorMessage name="reward" component={Error} />
             </div>
 
             <div className="flex flex-col gap-3 text-16 ">
@@ -185,7 +196,7 @@ const Page = () => {
 
             <div className="flex flex-col gap-3 text-16 ">
               <label htmlFor="totalPeople">
-                How many people are required for the task?
+                How Many People Are Required For The Task?
               </label>
               <Field
                 name="totalPeople"
@@ -195,7 +206,7 @@ const Page = () => {
             </div>
 
             <div className="flex flex-col gap-3 text-16 ">
-              <label htmlFor="amount">Enter payment amount</label>
+              <label htmlFor="amount">Enter Prize Pool Amount</label>
               <Field
                 name="amount"
                 className="border outline-none rounded-[4px] border-black p-2"
@@ -203,7 +214,7 @@ const Page = () => {
               <ErrorMessage name="amount" component={Error} />
             </div>
             <div className="flex flex-col gap-3 text-16 ">
-              <label htmlFor="fileDoc">Upload file (doc, pdf, png, jpg, etc.)</label>
+              <label htmlFor="fileDoc">Upload File (doc, pdf, png, jpg, etc.)</label>
               <input 
               name="fileDoc"
               className="border outline-none rounded-[4px] border-black p-2"

@@ -63,6 +63,15 @@ const Page = () => {
     }
   };
 
+
+  // await setDoc<Example>({
+  //   collection: "my_collection_key",
+  //   doc: {
+  //     ...myDoc, // includes 'key' and 'updated_at'
+  //     data: myNewData
+  //   }
+  // });
+
   useEffect(() => {
     if (user) {
       list();

@@ -2,6 +2,13 @@ import React from "react";
 
 const SubmissionCard = ({ item , selectUser, ischecked}) => {
   const { name, role, date, desc } = item;
+  // const {
+  //   applicantFirstName, 
+  //   applicantLastName, 
+  //   applicantBio, 
+  //   applicantResume, 
+  //   applicantPortfolio } = item
+
   return (
     <div className="flex align-top gap-4 border rounded-2xl p-7 bg-[#F7F7FD] mb-6">
       <div>

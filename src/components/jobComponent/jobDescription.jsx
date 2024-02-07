@@ -2,37 +2,70 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import Button from "../Button";
-import Thumbsup from "../../assets/thumbs-up.svg";
-import Thumbsdown from "../../assets/thumbs-down.svg";
-import Comment from "../../assets/comment.svg";
 import Ethereum from "../../assets/ethereum.svg";
 import ICP from "../../assets/icp-logo.svg";
 import Solana from "../../assets/solana-logo.svg";
 import PaperClip from "../../assets/paperclip.svg";
-import { useNav } from "../../context/nav_context";
 import HardDrive from "../../assets/hard-drive.svg";
 import LinkIcon from "../../assets/link.svg";
-import Link from "next/link";
 import DescListCard from "./descListCard";
 import { UseSelector, useSelector } from "react-redux";
-import { root } from "../../../store";
 import LikeButtons from "../likeButtons";
 import CommentButton from "../commentButton";
+import { setDoc } from "@junobuild/core-peer";
 
 const JobDescription = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userProposal, setUserProposal] = useState("");
 
   const data = useSelector(
     (state) => state.persistedReducer.jobValues.jobDetails
   );
-  console.log(data);
 
   // const { jobDetails } = useNav();
 
   // const { data } = jobDetails;
 
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
+  const userProfile = useSelector(
+    (state) => state.persistedReducer.user.userProfile
+  );
+    // console.log(userProfile)
+
+    const toggleModal = async () => {
+      setIsModalOpen(!isModalOpen);
+      try {
+        if (userProposal.trim() !== "") {
+          const submissionData = {
+            ...data,
+            applicantProposal: userProposal,
+            applicantFirstName: userProfile.firstName,
+            applicantLastName: userProfile.lastName,
+            applicantBio: userProfile.bio,
+            applicantPortfolio: userProfile.website,
+            applicantResume: userProfile.fileDoc,
+            applicantId: userProfile.owner
+          };
+          console.log("Submission Data", submissionData);
+          console.log("Submitting task proposal...")
+          
+          await setDoc({
+            collection: "taskProposals",
+            doc: {
+              key: data.taskId,
+              data: submissionData
+            }
+          });
+
+          console.log("Submission successful");
+        }
+      } catch (error) {
+        console.error("Task submission error:", error);
+      }
+
+    };
+
+  const handleProposalChange = (event) => {
+    setUserProposal(event.target.value);
   };
 
   const logo = (coin) => {
@@ -42,8 +75,11 @@ const JobDescription = () => {
       return Ethereum;
     } else if (coin === "solana") {
       return Solana;
-    }
-    // return null
+    } else if (coin === 'USDT'){
+        return USDT;
+      } else if (coin === 'USDC'){
+        return USDC;
+      }
   };
 
   return (
@@ -84,13 +120,15 @@ const JobDescription = () => {
           <DescListCard label="Job Description" value={data.description} />
           <DescListCard
             label="responsibilities"
-            // type="list"
             value={data.responsibilities}
           />
           <DescListCard
             label="requirements"
-            // type="list"
             value={data.requirements}
+          />
+            <DescListCard
+            label="reward pool"
+            value={data.rewardStructure}
           />
         </div>
         <div className="flex gap-5 mt-[56px] justify-end">
@@ -110,6 +148,8 @@ const JobDescription = () => {
                 <input
                   className="outline-none bg-[#F2F4F3] rounded-[8px] p-3 text-[14px] "
                   placeholder="Write Something..."
+                  value={userProposal}
+                  onChange={handleProposalChange}
                 />
               </div>
               <div className="flex justify-end gap-5 py-3">

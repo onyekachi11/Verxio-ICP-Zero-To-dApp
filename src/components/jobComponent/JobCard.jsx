@@ -15,13 +15,13 @@ import CommentButton from "../commentButton";
 const JobCard = ({ jobs }) => {
 
   const dispatch = useDispatch();
-  const { data } = jobs;
+  // const { data } = jobs;
 
-  // console.log("see jobs", {
-  //   ...jobs.data,
-  //   taskId: jobs.key,
-  //   owner: jobs.owner
-  // })
+  const data = {
+    ...jobs.data,
+    taskId: jobs.key,
+    owner: jobs.owner
+  }
 
   const logo = (coin) => {
     if (coin === "icp") {
