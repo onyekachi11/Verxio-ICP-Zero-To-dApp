@@ -7,8 +7,7 @@ import { usePathname } from "next/navigation";
 
 const Profile = () => {
   const pathname = usePathname();
-
-  console.log(pathname);
+  
   return (
     <div className="my-auto max-w-fit bg-red lg:mt-auto flex gap-4 lg:gap-8 ml-auto items-center md:px-8 text-grey font-light">
       <div className="flex items-center gap-2 relative min-h-fit">

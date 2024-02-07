@@ -175,6 +175,8 @@ const Page = () => {
               >
                 <option value="">select payment token eg. ICP</option>
                 <option value="icp">ICP</option>
+                <option value="etherum">USDT</option>
+                <option value="solana">USDC</option>
                 <option value="etherum">Ethereum</option>
                 <option value="solana">Solana</option>
               </Field>
