@@ -59,25 +59,3 @@ const Page = () => {
 };
 
 export default Page;
-
-// export async function getStaticProps() {
-//   try {
-//     const { items } = await listDocs({
-//       collection: "publish-task",
-//     });
-//     // Return the fetched data as props
-//     return {
-//       props: {
-//         jobs: items,
-//       },
-//     };
-//   } catch (error) {
-//     console.error("Error fetching data:", error);
-//     // Return an empty array as props in case of error
-//     return {
-//       props: {
-//         jobs: [],
-//       },
-//     };
-//   }
-// }
