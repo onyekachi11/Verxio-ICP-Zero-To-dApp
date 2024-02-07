@@ -1,12 +1,43 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "../../../components/Button";
 import SubmissionCard from "../../../components/submissionCard";
+import { useSelector } from "react-redux";
+import { listDocs } from "@junobuild/core-peer";
 
 const Page = () => {
   const [assignees, setAssignees] = useState([]);
-
   const [isCheckeds, setIscheckeds] = useState(false);
+  const [submissions, setSubmissions] = useState([])
+
+  const user = useSelector((state) => state.persistedReducer.user.userValue);
+  
+  useEffect(() => {
+    const list = async () => {
+      try {
+        const { items } = await listDocs({
+          collection: "taskProposals",
+        });
+
+        const allSubmission = items.map((item) => {
+          return {
+            ...item.data,
+            dateSubmitted: item.created_at
+          };
+        });
+        setSubmissions(allSubmission);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    if (user) {
+      list();
+    }
+  }, [user]);
+
+  // console.log("Task Submissions", submissions)
+  
   const data = [
     {
       id: 1,

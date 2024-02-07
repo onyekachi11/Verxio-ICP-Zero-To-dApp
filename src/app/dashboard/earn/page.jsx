@@ -19,6 +19,7 @@ const Page = () => {
           collection: "publish-task",
         });
         setJobs(items);
+        console.log(items)
       } catch (error) {
         console.error("Error fetching data:", error);
       }
