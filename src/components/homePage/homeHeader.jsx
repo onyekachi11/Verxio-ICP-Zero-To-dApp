@@ -2,7 +2,7 @@
 import React, { useEffect, useLayoutEffect } from "react";
 import { signIn, authSubscribe, initJuno } from "@junobuild/core-peer";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserValue } from "../../../slices/userSlices";
+import { setUserProfile, setUserValue } from "../../../slices/userSlices";
 // import { useNav } from "../../context/nav_context";
 // import { redirect } from "next/navigation";
 import { useRouter } from "next/navigation";
@@ -13,8 +13,12 @@ const HomeHeader = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const user = useSelector((state) => state.persistedReducer.user.userValue);
+  const userProfile = useSelector(
+    (state) => state.persistedReducer.user.userProfile
+  );
 
-  // console.log('begining',user)
+  console.log("user", user);
+  console.log("userProfile", userProfile);
 
   useEffect(() => {
     const initializeJuno = async () => {
@@ -38,10 +42,34 @@ const HomeHeader = () => {
         dispatch(setUserValue({ key, owner }));
       }
     });
+    
+    fetchData(user?.key);
     return () => {
       unsubscribe();
     };
-  }, [dispatch]);
+
+  }, [dispatch, user?.key]);
+
+  // useEffect(() => {
+  //   fetchData(user?.key);
+  // }, [user?.key]); // Run only once when component mounts
+
+  const fetchData = async (value) => {
+    try {
+      const response = await fetch(
+        `https://verxio-backend.vercel.app/api/v1/profiles/${value}`
+      ); // Replace with your actual endpoint
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log(responseData);
+        dispatch(setUserProfile(responseData.user));
+      } else {
+        console.error("GET request failed");
+      }
+    } catch (error) {
+      console.error("Error occurred while fetching data:", error);
+    }
+  };
 
   // useLayoutEffect(() => {
   //   if (!user?.key) {
@@ -50,17 +78,25 @@ const HomeHeader = () => {
   // });
 
   const handleLogin = async () => {
-    if (user?.key) {
+    if (user?.key && userProfile) {
       router.push("/dashboard/earn");
+    } else if (user?.key && !userProfile) {
+      dispatch(setEditUser(true));
+      router.push("/dashboard/settings");
     } else {
       try {
         await signIn();
-        router.push("/dashboard/earn");
+        if (!userProfile) {
+          router.push("/dashboard/settings");
+        } else {
+          router.push("/dashboard/earn");
+        }
       } catch (error) {
         console.error("Error during sign-in:", error);
       }
     }
   };
+
   return (
     <div className="flex justify-between  items-center w-full h-[100px] px-[45px] py-[40px]">
       <Logo className="w-[48px]" />

@@ -3,7 +3,7 @@ import { signOut } from "@junobuild/core-peer";
 import Image from "next/image";
 import SignOut from "../assets/SignOut.svg";
 import { useDispatch } from "react-redux";
-import { setUserValue, setUserProfile } from "../../slices/userSlices";
+import { setUserValue, setUserProfile, setEditUser } from "../../slices/userSlices";
 import { useRouter } from "next/navigation";
 
 const LogoutButton = () => {
@@ -15,6 +15,7 @@ const LogoutButton = () => {
     signOut();
     dispatch(setUserValue({}));
     dispatch(setUserProfile({}))
+    dispatch(setEditUser(false))
     router.push('/')
   };
 
