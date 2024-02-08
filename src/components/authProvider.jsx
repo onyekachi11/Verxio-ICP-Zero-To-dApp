@@ -1,22 +1,23 @@
 "use client";
 import { permanentRedirect, useRouter } from "next/navigation";
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useLayoutEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setEditUser } from "../../slices/userSlices";
 
 const AuthProvider = ({ children }) => {
   const router = useRouter();
+  const dispatch = useDispatch()
   const user = useSelector((state) => state.persistedReducer.user.userValue);
+  const userProfile = useSelector((state) => state.persistedReducer.user.userProfile);
 
-  useEffect(() => {
-    if (!user?.key) {
+  useLayoutEffect(() => {
+    if (!user?.key)  {
       router.push("/");
-    } else {
-      //   permanentRedirect("/dashboard/earn");
-    //   permanentRedirect( "/dashboard/earn");
-      router.push("/dashboard/earn");
-
+    } else if(user.key && !userProfile){
+      dispatch(setEditUser(true))
+      router.push("/dashboard/settings");
     }
-  }, [user?.key, router]);
+  }, [user?.key, router, userProfile]);
   return <div>{children}</div>;
 };
 

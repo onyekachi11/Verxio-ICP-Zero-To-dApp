@@ -8,10 +8,11 @@ import { listDocs } from "@junobuild/core-peer";
 const Page = () => {
   const [assignees, setAssignees] = useState([]);
   const [isCheckeds, setIscheckeds] = useState(false);
-  const [submissions, setSubmissions] = useState([])
+  const [submissions, setSubmissions] = useState([]);
+  const [activeTab, setActiveTab] = useState(1);
 
   const user = useSelector((state) => state.persistedReducer.user.userValue);
-  
+
   useEffect(() => {
     const list = async () => {
       try {
@@ -22,7 +23,7 @@ const Page = () => {
         const allSubmission = items.map((item) => {
           return {
             ...item.data,
-            dateSubmitted: item.created_at
+            dateSubmitted: item.created_at,
           };
         });
         setSubmissions(allSubmission);
@@ -36,31 +37,7 @@ const Page = () => {
     }
   }, [user]);
 
-  // console.log("Task Submissions", submissions)
-  
-  const data = [
-    {
-      id: 1,
-      name: "Kenechukwu Ikejiani",
-      role: "Frontend Engineer",
-      date: "Jan, 17",
-      desc: "As a frontend engineer, you will collaborate with cross-functional teams to translate design concepts into... responsive and interactive web applications. If you are passionate about creating clean, efficient, and visually appealing interfaces.",
-    },
-    {
-      id: 2,
-      name: "Kenechukwu Ikejiani",
-      role: "Frontend Engineer",
-      date: "Jan, 17",
-      desc: "As a frontend engineer, you will collaborate with cross-functional teams to translate design concepts into... responsive and interactive web applications. If you are passionate about creating clean, efficient, and visually appealing interfaces.",
-    },
-    {
-      id: 3,
-      name: "Kenechukwu Ikejiani",
-      role: "Frontend Engineer",
-      date: "Jan, 17",
-      desc: "As a frontend engineer, you will collaborate with cross-functional teams to translate design concepts into... responsive and interactive web applications. If you are passionate about creating clean, efficient, and visually appealing interfaces.",
-    },
-  ];
+  console.log("Task Submissions", submissions);
 
   const selectUser = (item) => {
     setIscheckeds(!isCheckeds);
@@ -79,22 +56,71 @@ const Page = () => {
   console.log("assignees", assignees);
 
   return (
-    <div className="border rounded-lg px-[41px] py-[37px]">
+    <div className="border rounded-lg px-[41px] py-[37px] h-full">
       <div className="flex justify-between mb-9 ">
         <h2 className="text-primary text-[28px] font-semibold capitalize">
           Submissions
         </h2>
-        <Button outline name="assign" />
+        {activeTab === 1 && <Button outline name="assign" />}
       </div>
-
-      {data.map((item) => (
+      <div className="flex gap-5 mb-7">
+        <Button
+          name="job posted"
+          outline={activeTab !== 1}
+          onClick={() => setActiveTab(1)}
+          className={
+            activeTab === 1
+              ? "text-[#00ADEF] bg-[#00ADEF]/10 rounded-[0px] "
+              : "text-[#60606C] bg-transparent rounded-[0px]"
+          }
+        />
+        <Button
+          name="job applied"
+          outline={activeTab !== 2}
+          onClick={() => setActiveTab(2)}
+          className={
+            activeTab === 2
+              ? "text-[#00ADEF] bg-[#00ADEF]/10 rounded-[0px] "
+              : "text-[#60606C] bg-transparent rounded-[0px]"
+          }
+        />
+      </div>
+      {/* 
+      {submissions.map((item) => (
         <SubmissionCard
-          key={item.id}
+          key={item.applicantId}
           item={item}
           selectUser={selectUser}
           isChecked={isCheckeds}
         />
-      ))}
+      ))} */}
+
+      {activeTab === 1 &&
+        submissions
+          .filter((items) => items !== user.owner)
+          .map((item) => (
+            <SubmissionCard
+              key={item.applicantId}
+              item={item}
+              selectUser={selectUser}
+              isChecked={isCheckeds}
+            />
+          ))}
+      {activeTab === 2 &&
+      <div>
+        <p>Apply to a Task</p>
+      </div>
+        // submissions
+        //   .filter((items) => items !== user.owner)
+        //   .map((item) => (
+        //     <SubmissionCard
+        //       key={item.applicantId}
+        //       item={item}
+        //       selectUser={selectUser}
+        //       isChecked={isCheckeds}
+        //     />
+        //   ))
+          }
     </div>
   );
 };

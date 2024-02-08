@@ -42,8 +42,8 @@ const JobDescription = () => {
             applicantLastName: userProfile.lastName,
             applicantBio: userProfile.bio,
             applicantPortfolio: userProfile.website,
-            applicantResume: userProfile.fileDoc,
-            applicantId: userProfile.owner
+            applicantResume: userProfile.powUrl,
+            applicantId: userProfile._id
           };
           console.log("Submission Data", submissionData);
           console.log("Submitting task proposal...")
