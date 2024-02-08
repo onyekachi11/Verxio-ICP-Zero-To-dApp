@@ -9,7 +9,6 @@ const SubmissionCard = ({ item, selectUser, ischecked }) => {
     applicantBio,
     applicantResume,
     applicantPortfolio,
-    description,
     applicantProposal,
     dateSubmitted,
   } = item;
