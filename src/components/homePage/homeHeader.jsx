@@ -15,7 +15,6 @@ import { Logo } from "../atoms";
 import { throttle } from "lodash";
 import { toast } from "sonner";
 
-const throttledFetchData = throttle((key) => fetchData(key), 1000);
 
 const HomeHeader = () => {
   const dispatch = useDispatch();
@@ -24,8 +23,8 @@ const HomeHeader = () => {
   const userProfile = useSelector(
     (state) => state.persistedReducer.user.userProfile
   );
-  const throttledFetchData = throttle((key) => fetchData(key), 1000);
-  const throttledUnsubscribe = throttle((key) => unsubscribe, 1000);
+  // const throttledFetchData = throttle((key) => fetchData(key), 1000);
+  // const throttledUnsubscribe = throttle((key) => unsubscribe, 1000);
 
   const [user2, setUser2] = useState(null);
 
@@ -67,11 +66,11 @@ const HomeHeader = () => {
           toast.info("Pls create account");
           router.push("/dashboard/settings");
         }
-        if (error) {
-          console.log(response);
-        }
+        // if (error) {
+        //   console.log(response);
+        // }
       }
-      return response;
+      // return response;
     } catch (error) {
       console.log("Error occurred while fetching data:", error);
     }
