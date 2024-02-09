@@ -24,14 +24,9 @@ const Page = () => {
   console.log(edit)
 
   const dispatch = useDispatch();
-
-  const [userDetailHistory, setuserDetailHistory] = useState([]);
-  // const [userProfile, setuserProfile] = useState();
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [profileImg, setProfileImg] = useState(userProfile.profilePicUrl || '');
-  // const [edit, setEdit] = useState(false);
-
   const fileInputRef = useRef(null);
 
   console.log(userProfile);
@@ -44,51 +39,14 @@ const Page = () => {
         });
       } catch (error) {
         console.error("Error initializing Juno:", error);
-        // Handle the error, e.g., show a user-friendly message or redirect to an error page.
       }
     };
 
     initializeJuno();
   }, []);
 
-  const list = async () => {
-    try {
-      const { items } = await listDocs({
-        collection: "userProfile-details",
-      });
-      console.log(items);
-      setuserDetailHistory(items);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  // console.log(user)
 
-
-  // await setDoc<Example>({
-  //   collection: "my_collection_key",
-  //   doc: {
-  //     ...myDoc, // includes 'key' and 'updated_at'
-  //     data: myNewData
-  //   }
-  // });
-
-  useEffect(() => {
-    if (user) {
-      list();
-    }
-  }, [user]);
-
-  // useEffect(() => {
-  //   const lastUserDetails = userDetailHistory[0];
-  //   if (typeof lastUserDetails === "object") {
-  //     dispatch(
-  //       setUserProfile({
-  //         ...lastUserDetails.data,
-  //         owner: lastUserDetails.owner,
-  //       })
-  //     );
-  //   }
-  // }, [dispatch, userDetailHistory]);
 
   const handleImageChange = (event) => {
     const file = event.currentTarget.files[0];
@@ -202,7 +160,7 @@ const Page = () => {
         <div className="w-[200px] h-[200px] bg-slate-500  border-[8px] border-white rounded-full absolute -top-[100px]">
           {selectedImage && (
             <Image
-              src={userProfile?.profilePicUrl}
+              src={selectedImage}
               alt="profile picture"
               width={200}
               height={200}
