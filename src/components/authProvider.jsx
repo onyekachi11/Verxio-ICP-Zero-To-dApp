@@ -13,8 +13,8 @@ const AuthProvider = ({ children }) => {
   useLayoutEffect(() => {
     if (!user?.key)  {
       router.push("/");
-    } else if(user.key && !userProfile){
-      dispatch(setEditUser(true))
+    } else if (user.key && Object.keys(userProfile).length == 0) {
+      dispatch(setEditUser(true));
       router.push("/dashboard/settings");
     }
   }, [user?.key, router, userProfile]);

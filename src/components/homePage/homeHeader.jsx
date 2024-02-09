@@ -1,8 +1,12 @@
 "use client";
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { signIn, authSubscribe, initJuno } from "@junobuild/core-peer";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserProfile, setUserValue } from "../../../slices/userSlices";
+import {
+  setEditUser,
+  setUserProfile,
+  setUserValue,
+} from "../../../slices/userSlices";
 // import { useNav } from "../../context/nav_context";
 // import { redirect } from "next/navigation";
 import { useRouter } from "next/navigation";
@@ -42,12 +46,11 @@ const HomeHeader = () => {
         dispatch(setUserValue({ key, owner }));
       }
     });
-    
-    fetchData(user?.key);
+
+    // fetchData(user?.key);
     return () => {
       unsubscribe();
     };
-
   }, [dispatch, user?.key]);
 
   // useEffect(() => {
@@ -65,9 +68,12 @@ const HomeHeader = () => {
         dispatch(setUserProfile(responseData.user));
       } else {
         console.error("GET request failed");
+        if (error) {
+          console.log(response);
+        }
       }
     } catch (error) {
-      console.error("Error occurred while fetching data:", error);
+      console.log("Error occurred while fetching data:", error);
     }
   };
 
@@ -78,15 +84,16 @@ const HomeHeader = () => {
   // });
 
   const handleLogin = async () => {
-    if (user?.key && userProfile) {
+    if (user?.key && Object.keys(userProfile).length !== 0) {
       router.push("/dashboard/earn");
-    } else if (user?.key && !userProfile) {
+    } else if (user?.key && Object.keys(userProfile).length == 0) {
       dispatch(setEditUser(true));
       router.push("/dashboard/settings");
     } else {
       try {
         await signIn();
-        if (!userProfile) {
+        fetchData(user?.key);
+        if (Object.keys(userProfile).length == 0) {
           router.push("/dashboard/settings");
         } else {
           router.push("/dashboard/earn");
