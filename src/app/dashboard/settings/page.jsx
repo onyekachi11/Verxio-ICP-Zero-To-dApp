@@ -37,7 +37,6 @@ const Page = () => {
         });
       } catch (error) {
         console.error("Error initializing Juno:", error);
-        // Handle the error, e.g., show a user-friendly message or redirect to an error page.
       }
     };
 
@@ -93,10 +92,12 @@ const Page = () => {
     {
       let url;
       let ImageUrl;
+
       try {
         // Handle file upload logic
         if (typeof values.fileDoc == "object") {
           const filename = `${user.key}-${values.fileDoc.name}`;
+          console.log("Uploading file document...")
           const { downloadUrl } = await uploadFile({
             collection: "userProfile-document",
             data: values.fileDoc,
@@ -107,6 +108,7 @@ const Page = () => {
 
         if (typeof profileImg === "object") {
           const filename = `${user.key}-${profileImg.name}`;
+          console.log("Uploading profile image...")
           const { downloadUrl } = await uploadFile({
             collection: "userProfile-photo",
             data: profileImg,

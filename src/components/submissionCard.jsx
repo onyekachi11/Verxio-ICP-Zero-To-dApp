@@ -21,7 +21,7 @@ const SubmissionCard = ({ item, selectUser, ischecked }) => {
       <div>
         <div className="border w-[89px] h-[89px] bg-gray-600 rounded-full"></div>
       </div>
-      <div>
+      <div className="w-full">
         <div className="flex justify-between">
           <div>
             <div className="flex gap-1">

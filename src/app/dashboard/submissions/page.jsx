@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Button from "../../../components/Button";
 import SubmissionCard from "../../../components/submissionCard";
 import { useSelector } from "react-redux";
-import { listDocs } from "@junobuild/core-peer";
+import { listDocs, setDoc } from "@junobuild/core-peer";
 
 const Page = () => {
   const [assignees, setAssignees] = useState([]);
@@ -55,13 +55,38 @@ const Page = () => {
 
   console.log("assignees", assignees);
 
+  const handleAssignButtonClick = async () => {
+    try {
+      if (assignees.length > 0) {
+        // console.log("Assigned items:", assignees);
+        const documentKey = "your_document_key";
+
+        console.log("Assigning task...");
+        await setDoc({
+          collection: "projects",
+          doc: {
+            key: documentKey,
+            data: assignees
+          }
+        });
+        console.log("Project assignment done.");
+      } else {
+        console.log("No items assigned. Please select at least one item before clicking Assign.");
+      }
+    } catch (error) {
+      console.error("Error assigning items:", error);
+    }
+  };
+
   return (
     <div className="border rounded-lg px-[41px] py-[37px] h-full">
       <div className="flex justify-between mb-9 ">
         <h2 className="text-primary text-[28px] font-semibold capitalize">
           Submissions
         </h2>
-        {activeTab === 1 && <Button outline name="assign" />}
+        {activeTab === 1 && (
+          <Button outline name="assign" onClick={handleAssignButtonClick} />
+        )}
       </div>
       <div className="flex gap-5 mb-7">
         <Button
@@ -85,15 +110,6 @@ const Page = () => {
           }
         />
       </div>
-      {/* 
-      {submissions.map((item) => (
-        <SubmissionCard
-          key={item.applicantId}
-          item={item}
-          selectUser={selectUser}
-          isChecked={isCheckeds}
-        />
-      ))} */}
 
       {activeTab === 1 &&
         submissions
@@ -107,20 +123,19 @@ const Page = () => {
             />
           ))}
       {activeTab === 2 &&
-      <div>
-        <p>Apply to a Task</p>
-      </div>
-        // submissions
-        //   .filter((items) => items !== user.owner)
-        //   .map((item) => (
-        //     <SubmissionCard
-        //       key={item.applicantId}
-        //       item={item}
-        //       selectUser={selectUser}
-        //       isChecked={isCheckeds}
-        //     />
-        //   ))
-          }
+        // <div>
+        //   <p>Apply to a Task</p>
+        // </div>
+        submissions
+          .filter((items) => items.applicantId == user.owner)
+          .map((item) => (
+            <SubmissionCard
+              key={item.applicantId}
+              item={item}
+              selectUser={selectUser}
+              isChecked={isCheckeds}
+            />
+          ))}
     </div>
   );
 };
