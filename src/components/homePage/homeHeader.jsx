@@ -66,9 +66,6 @@ const HomeHeader = () => {
           toast.info("Pls create account");
           router.push("/dashboard/settings");
         }
-        // if (error) {
-        //   console.log(response);
-        // }
       }
       // return response;
     } catch (error) {
@@ -77,7 +74,7 @@ const HomeHeader = () => {
   };
 
   const handleLogin = async () => {
-    if (user?.key && Object.keys(userProfile).length !== 0) {
+    if (user?.key && userProfile !== false) {
       router.push("/dashboard");
     } else if (!user?.key && !user2) {
       signIn();

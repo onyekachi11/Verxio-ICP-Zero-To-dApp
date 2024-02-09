@@ -28,7 +28,8 @@ const Page = () => {
     !user ||
     !user.key ||
     !userProfile ||
-    Object.keys(userProfile).length === 0
+    // Object.keys(userProfile).length === 0
+    userProfile === false
   ) {
     return null; // Return nothing if redirection is required
   }
