@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState, React, useRef } from "react";
-import {  initJuno} from "@junobuild/core-peer";
+import { initJuno } from "@junobuild/core-peer";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Button from "../../../components/Button";
 import Edit from "../../../assets/edit.svg";
@@ -328,7 +328,8 @@ const Page = () => {
                   ) : (
                     userProfile.website && (
                       <Link
-                        href={userProfile?.website}
+                        // target={userProfile.website}
+                        href={`https://${userProfile.website}`}
                         className="text-[17px] text-black"
                       >
                         {userProfile.website}
