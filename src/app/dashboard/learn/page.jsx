@@ -17,7 +17,7 @@ const Page = () => {
     <div className="border rounded-xl m-6 text-[#424242] px-[40px] py-[32px] ">
       <p className="text-[14px]">
         It’s Learn o’clock,{" "}
-        <span className="capitalize">{userProfile.firstName}!</span>
+        <span className="capitalize">{userProfile?.firstName}!</span>
       </p>
       <h2 className="text-[28px] font-semibold">What’s new on Verxio today?</h2>
 

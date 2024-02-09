@@ -31,7 +31,7 @@ const Sidebar = () => {
 
   return (
     <>
-      {Object.keys(userProfile).length !== 0 && (
+      {userProfile && Object.keys(userProfile).length !== 0 && (
         <nav
           className={`
       ${isOpen ? "translate-x-0 absolute h-full " : "max-lg:hidden"}

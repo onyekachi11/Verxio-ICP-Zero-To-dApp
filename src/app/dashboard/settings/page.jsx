@@ -11,7 +11,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { root } from "../../../../store";
 import { setEditUser, setUserProfile } from "../../../../slices/userSlices";
 import Link from "next/link";
-
+// import { toast } from "sonner";
+import {  toast } from "react-toastify";
 const Page = () => {
   const user = useSelector((state) => state.persistedReducer.user.userValue);
   const userProfile = useSelector(
@@ -23,7 +24,7 @@ const Page = () => {
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [profileImg, setProfileImg] = useState(
-    userProfile.profilePicUrl || null
+    userProfile?.profilePicUrl || null
   );
 
   const fileInputRef = useRef(null);
@@ -70,8 +71,8 @@ const Page = () => {
     email: userProfile?.email || "",
     phoneNumber: userProfile?.phoneNumber || "",
     website: userProfile?.website || "",
-    fileDoc: userProfile.powUrl || null,
-    profileImageDoc: userProfile.profilePicUrl || "",
+    fileDoc: userProfile?.powUrl || null,
+    profileImageDoc: userProfile?.profilePicUrl || "",
   };
 
   const validationchema = Yup.object().shape({
@@ -124,8 +125,8 @@ const Page = () => {
           email: values.email,
           phoneNumber: values.phoneNumber,
           website: values.website,
-          powUrl: url || userProfile.powUrl,
-          profilePicUrl: ImageUrl || userProfile.profilePicUrl,
+          powUrl: url || userProfile?.powUrl,
+          profilePicUrl: ImageUrl || userProfile?.profilePicUrl,
         };
 
         console.log(value);
@@ -141,9 +142,14 @@ const Page = () => {
           }
         );
         const data = await response.json();
-        console.log("Profile updated successfully:", data);
-        dispatch(setUserProfile(data.user));
-        dispatch(setEditUser(false));
+        if (data.success === true) {
+          console.log("Profile updated successfully:", data);
+          dispatch(setUserProfile(data.user));
+          dispatch(setEditUser(false))
+          toast.success(`${data.message}`);
+        } else{
+          toast.error(`${data.message}`)
+        }
         // Handle success response here
       } catch (error) {
         console.error("Upload Error:", error);
@@ -215,7 +221,7 @@ const Page = () => {
                     />
                   ) : (
                     <p className="text-[17px] text-black capitalize">
-                      {userProfile.firstName}
+                      {userProfile?.firstName}
                     </p>
                   )}
                   <ErrorMessage name="firstName" component={Error} />
@@ -238,7 +244,7 @@ const Page = () => {
                     />
                   ) : (
                     <p className="text-[17px] text-black capitalize">
-                      {userProfile.lastName}
+                      {userProfile?.lastName}
                     </p>
                   )}
                   <ErrorMessage name="lastName" component={Error} />
@@ -261,7 +267,9 @@ const Page = () => {
                       className="border outline-none rounded-[4px] border-black p-2 max-h-[90px]"
                     />
                   ) : (
-                    <p className="text-[17px] text-black ">{userProfile.bio}</p>
+                    <p className="text-[17px] text-black ">
+                      {userProfile?.bio}
+                    </p>
                   )}
                 </div>
                 <div className="flex flex-col gap-3 text-16 ">
@@ -281,7 +289,7 @@ const Page = () => {
                     />
                   ) : (
                     <p className="text-[17px] text-black">
-                      {userProfile.email}
+                      {userProfile?.email}
                     </p>
                   )}
                   <ErrorMessage name="email" component={Error} />
@@ -304,7 +312,7 @@ const Page = () => {
                     />
                   ) : (
                     <p className="text-[17px] text-black capitalize">
-                      {userProfile.phoneNumber}
+                      {userProfile?.phoneNumber}
                     </p>
                   )}
                   <ErrorMessage name="phoneNumber" component={Error} />
@@ -326,13 +334,13 @@ const Page = () => {
                       className="border outline-none rounded-[4px] border-black p-2"
                     />
                   ) : (
-                    userProfile.website && (
+                    userProfile?.website && (
                       <Link
-                        // target={userProfile.website}
-                        href={`https://${userProfile.website}`}
+                        // target={userProfile?.website}
+                        href={`https://${userProfile?.website}`}
                         className="text-[17px] text-black"
                       >
-                        {userProfile.website}
+                        {userProfile?.website}
                       </Link>
                     )
                   )}
@@ -358,7 +366,7 @@ const Page = () => {
                       }
                     />
                   ) : (
-                    userProfile.powUrl && (
+                    userProfile?.powUrl && (
                       <Link
                         href={userProfile?.powUrl}
                         className="border p-3 bg-white shadow-md font-semibold mt-3"

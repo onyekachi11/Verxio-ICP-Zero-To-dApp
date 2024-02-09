@@ -12,8 +12,9 @@ import {
 import { useRouter } from "next/navigation";
 import Button from "../Button";
 import { Logo } from "../atoms";
-import { throttle } from "lodash";
-import { toast } from "sonner";
+// import { throttle } from "lodash";
+// import { toast } from "sonner";
+import {  toast } from "react-toastify";
 
 
 const HomeHeader = () => {
