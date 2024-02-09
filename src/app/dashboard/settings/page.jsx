@@ -21,15 +21,17 @@ const Page = () => {
     (state) => state.persistedReducer.user.userProfile
   );
   const edit = useSelector((state) => state.persistedReducer.user.editUser);
-  console.log(edit)
+  console.log(edit);
 
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [profileImg, setProfileImg] = useState(userProfile.profilePicUrl || '');
+  const [profileImg, setProfileImg] = useState(userProfile.profilePicUrl || null);
+  // const [edit, setEdit] = useState(false);
+
   const fileInputRef = useRef(null);
 
-  console.log(userProfile);
+  console.log(profileImg);
 
   useEffect(() => {
     const initializeJuno = async () => {
@@ -45,21 +47,68 @@ const Page = () => {
     initializeJuno();
   }, []);
 
-  // console.log(user)
+  const list = async () => {
+    try {
+      const { items } = await listDocs({
+        collection: "userProfile-details",
+      });
+      console.log(items);
+      setuserDetailHistory(items);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
+
+  // await setDoc<Example>({
+  //   collection: "my_collection_key",
+  //   doc: {
+  //     ...myDoc, // includes 'key' and 'updated_at'
+  //     data: myNewData
+  //   }
+  // });
+
+  useEffect(() => {
+    if (user) {
+      list();
+    }
+  }, [user]);
+
+  // useEffect(() => {
+  //   const lastUserDetails = userDetailHistory[0];
+  //   if (typeof lastUserDetails === "object") {
+  //     dispatch(
+  //       setUserProfile({
+  //         ...lastUserDetails.data,
+  //         owner: lastUserDetails.owner,
+  //       })
+  //     );
+  //   }
+  // }, [dispatch, userDetailHistory]);
 
   const handleImageChange = (event) => {
     const file = event.currentTarget.files[0];
+    const files = event.target.files[0];
     setProfileImg(file);
+
+    const formData = new FormData();
+    formData.append("image", files);
+    console.log(file);
+    console.log(files);
 
     if (file) {
       const reader = new FileReader();
+      console.log(reader);
 
       reader.onloadend = () => {
         setSelectedImage(reader.result);
+        const formData = new FormData();
+        formData.append("image", reader.result);
+        console.log(formData);
       };
 
       reader.readAsDataURL(file);
+      console.log(reader.readAsDataURL(file));
     }
   };
 
@@ -74,11 +123,11 @@ const Page = () => {
     email: userProfile?.email || "",
     phoneNumber: userProfile?.phoneNumber || "",
     website: userProfile?.website || "",
-    fileDoc: userProfile.powUrl || "",
+    fileDoc: userProfile.powUrl || null,
     profileImageDoc: userProfile.profilePicUrl || "",
   };
 
-  console.log(initialValues.profileImageDoc)
+  console.log(initialValues.fileDoc);
 
   const validationchema = Yup.object().shape({
     firstName: Yup.string().required("First name is required"),
@@ -99,7 +148,7 @@ const Page = () => {
 
       try {
         // Handle file upload logic
-        if (values.fileDoc !== '') {
+        if (values.fileDoc == '') {
           const filename = `${user.key}-${values.fileDoc.name}`;
           console.log("Uploading file document...")
           const { downloadUrl } = await uploadFile({
@@ -110,7 +159,7 @@ const Page = () => {
           url = downloadUrl;
         }
 
-        if (profileImg !== '') {
+        if (profileImg == '') {
           const filename = `${user.key}-${profileImg.name}`;
           console.log("Uploading profile image...")
           const { downloadUrl } = await uploadFile({
@@ -124,7 +173,7 @@ const Page = () => {
         console.log(url, ImageUrl);
 
         const value = {
-          _id: user.owner ,
+          _id: user.owner,
           firstName: values.firstName,
           lastName: values.lastName,
           bio: values.bio,
@@ -134,6 +183,8 @@ const Page = () => {
           powUrl: url || userProfile.powUrl,
           profilePicUrl: ImageUrl || userProfile.profilePicUrl,
         };
+
+        console.log(value);
 
         const response = await fetch(
           `https://verxio-backend.vercel.app/api/v1/profiles`,
@@ -147,8 +198,8 @@ const Page = () => {
         );
         const data = await response.json();
         console.log("Profile updated successfully:", data);
-        dispatch(setUserProfile(data.user))
-        dispatch(setEditUser(false))
+        dispatch(setUserProfile(data.user));
+        dispatch(setEditUser(false));
         // Handle success response here
       } catch (error) {
         console.error("Upload Error:", error);
