@@ -17,8 +17,10 @@ const Page = () => {
   useEffect(() => {
     if (!user?.key) {
       router.push("/");
-    } else if (!userProfile || Object.keys(userProfile).length === 0) {
+    } else if (Object.keys(userProfile).length === 0) {
       router.push("/dashboard/settings");
+    } else {
+      router.push("/dashboard/earn");
     }
   }, [user?.key, userProfile]);
 

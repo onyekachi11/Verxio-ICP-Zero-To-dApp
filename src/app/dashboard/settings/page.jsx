@@ -130,7 +130,7 @@ const Page = () => {
       let ImageUrl;
       try {
         // Handle file upload logic
-        if (values.fileDoc !== null) {
+        if (values.fileDoc == null) {
           const filename = `${user.key}-${values.fileDoc.name}`;
           const { downloadUrl } = await uploadFile({
             collection: "userProfile-document",
@@ -140,7 +140,7 @@ const Page = () => {
           url = downloadUrl;
         }
 
-        if (profileImg !== null) {
+        if (profileImg == null) {
           const filename = `${user.key}-${profileImg.name}`;
           const { downloadUrl } = await uploadFile({
             collection: "userProfile-photo",

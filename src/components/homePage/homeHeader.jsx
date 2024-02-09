@@ -21,8 +21,11 @@ const HomeHeader = () => {
     (state) => state.persistedReducer.user.userProfile
   );
 
+  const [user2, setUser2] = useState(null);
+
   console.log("user", user);
   console.log("userProfile", userProfile);
+  console.log("user2", user2);
 
   useEffect(() => {
     const initializeJuno = async () => {
@@ -46,16 +49,12 @@ const HomeHeader = () => {
         dispatch(setUserValue({ key, owner }));
       }
     });
-
+    // user?.key && fetchData(user?.key);
     // fetchData(user?.key);
     return () => {
       unsubscribe();
     };
   }, [dispatch, user?.key]);
-
-  // useEffect(() => {
-  //   fetchData(user?.key);
-  // }, [user?.key]); // Run only once when component mounts
 
   const fetchData = async (value) => {
     try {
@@ -66,12 +65,17 @@ const HomeHeader = () => {
         const responseData = await response.json();
         console.log(responseData);
         dispatch(setUserProfile(responseData.user));
+        setUser2(responseData.user);
+        router.push("/dashboard");
       } else {
         console.error("GET request failed");
+        console.log(response.status);
+        response.status === 404 && router.push("/dashboard/settings");
         if (error) {
           console.log(response);
         }
       }
+      return response;
     } catch (error) {
       console.log("Error occurred while fetching data:", error);
     }
@@ -83,26 +87,39 @@ const HomeHeader = () => {
   //   }
   // });
 
+  // const handleLogin = async () => {
+  //   if (user?.key && Object.keys(userProfile).length !== 0) {
+  //     router.push("/dashboard/earn");
+  //   } else if (
+  //     user?.key &&
+  //     userProfile &&
+  //     Object.keys(userProfile).length == 0
+  //   ) {
+  //     dispatch(setEditUser(true));
+  //     router.push("/dashboard/submissions");
+  //   } else {
+  //     try {
+  //       await signIn();
+  //       if (user2 !== null && Object.keys(user2).length == 0) {
+  //         router.push("/dashboard/learn");
+  //       } else {
+  //         router.push("/dashboard/earn");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error during sign-in:", error);
+  //     }
+  //   }
+  // };
+
   const handleLogin = async () => {
-    if (user?.key && Object.keys(userProfile).length !== 0) {
-      router.push("/dashboard/earn");
-    } else if (user?.key && Object.keys(userProfile).length == 0) {
-      dispatch(setEditUser(true));
-      router.push("/dashboard/settings");
-    } else {
-      try {
-        await signIn();
-        fetchData(user?.key);
-        if (Object.keys(userProfile).length == 0) {
-          router.push("/dashboard/settings");
-        } else {
-          router.push("/dashboard/earn");
-        }
-      } catch (error) {
-        console.error("Error during sign-in:", error);
-      }
+    if (user?.key && Object.keys(user2).length !== 0) {
+      router.push("/dashboard");
+    } else if (!user?.key && !user2) {
+      await signIn();
     }
   };
+
+  user?.key && fetchData(user?.key);
 
   return (
     <div className="flex justify-between  items-center w-full h-[100px] px-[45px] py-[40px]">
@@ -119,7 +136,10 @@ const HomeHeader = () => {
       </div>
       <Button
         name="Get started"
-        onClick={() => handleLogin()}
+        onClick={() => {
+          handleLogin();
+          // user?.key && fetchData(user?.key);
+        }}
         outline
         className="border-white text-[14px] text-white"
       />
