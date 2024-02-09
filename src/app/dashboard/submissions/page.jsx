@@ -97,7 +97,7 @@ const Page = () => {
 
       {activeTab === 1 &&
         submissions
-          .filter((items) => items !== user.owner)
+          .filter((items) => items.owner == user.owner)
           .map((item) => (
             <SubmissionCard
               key={item.applicantId}

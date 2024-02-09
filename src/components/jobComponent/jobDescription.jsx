@@ -29,6 +29,7 @@ const JobDescription = () => {
   const userProfile = useSelector(
     (state) => state.persistedReducer.user.userProfile
   );
+  console.log(data)
     // console.log(userProfile)
 
     const toggleModal = async () => {
@@ -47,6 +48,7 @@ const JobDescription = () => {
           };
           console.log("Submission Data", submissionData);
           console.log("Submitting task proposal...")
+
           
           await setDoc({
             collection: "taskProposals",

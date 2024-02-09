@@ -12,7 +12,7 @@ import LogoutButton from "./logout";
 const Sidebar = () => {
   const { isOpen, toggleNav } = useNav();
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.persistedReducer.user.userValue);
+  const userProfile = useSelector((state) => state.persistedReducer.user.userProfile);
 
   useEffect(() => {
     const initializeJuno = async () => {
@@ -30,31 +30,35 @@ const Sidebar = () => {
   }, []);
 
   return (
-    <nav
-      className={`
+    <>
+      {Object.keys(userProfile).length !== 0 && (
+        <nav
+          className={`
       ${isOpen ? "translate-x-0 absolute h-full " : "max-lg:hidden"}
       w-[340px] bg-primary z-50 h-screen `}
-    >
-      <div className="border-b border-dashed flex justify-center items-center px-[5%]">
-        <Logo className="py-12" />
-      </div>
+        >
+          <div className="border-b border-dashed flex justify-center items-center px-[5%]">
+            <Logo className="py-12" />
+          </div>
 
-      <div className="flex justify-between flex-col h-[calc(100%-200px)] p-3 ">
-        <ul className="">
-          {NavigationItems.map((item, index) => (
-            <SidebarMenuItem key={`sidebar-item-${index}`} {...item} />
-          ))}
-        </ul>
+          <div className="flex justify-between flex-col h-[calc(100%-200px)] p-3 ">
+            <ul className="">
+              {NavigationItems.map((item, index) => (
+                <SidebarMenuItem key={`sidebar-item-${index}`} {...item} />
+              ))}
+            </ul>
 
-        {/* {user ? <LogoutButton /> : <LoginButton />} */}
-        <LogoutButton/>
+            {/* {user ? <LogoutButton /> : <LoginButton />} */}
+            <LogoutButton />
 
-        <button className="flex items-center mx-auto w-[80%] gap-3">
-          <p className="text-white text-[12px]">Powered by</p>
-          <Image src={AxiosLogo} alt="Axios Logo" width={50} height={50} />
-        </button>
-      </div>
-    </nav>
+            <button className="flex items-center mx-auto w-[80%] gap-3">
+              <p className="text-white text-[12px]">Powered by</p>
+              <Image src={AxiosLogo} alt="Axios Logo" width={50} height={50} />
+            </button>
+          </div>
+        </nav>
+      )}
+    </>
   );
 };
 
