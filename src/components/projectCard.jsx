@@ -4,6 +4,8 @@ import chat from "../assets/comment-white.svg"
 
 
 const ProjectCard = ({ item }) => {
+
+  console.log(item)
   const { applicantFirstName, description, title, applicantlastName} = item;
   return (
     <>
@@ -24,7 +26,7 @@ const ProjectCard = ({ item }) => {
         </div>
         <p className="text-[16px] text-[#5F6A61]">{description}</p>
       </div>
-      <Button name={`chart ${applicantFirstName}`} icon={chat} className="mt-[32px]" />
+      <Button name={`chat ${applicantFirstName}`} icon={chat} className="mt-[32px]" />
     </>
   );
 };

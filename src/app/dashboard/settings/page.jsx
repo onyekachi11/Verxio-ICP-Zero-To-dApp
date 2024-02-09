@@ -1,37 +1,33 @@
 "use client";
-import { useContext, useEffect, useState, React, useRef } from "react";
-import { authSubscribe, initJuno, listDocs } from "@junobuild/core-peer";
+import { useEffect, useState, React, useRef } from "react";
+import { initJuno } from "@junobuild/core-peer";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Button from "../../../components/Button";
 import Edit from "../../../assets/edit.svg";
 import * as Yup from "yup";
 import { uploadFile, setDoc } from "@junobuild/core-peer";
-import { nanoid } from "nanoid";
-import { LoadingButton } from "@mui/lab";
 import Image from "next/image";
-import { useNav } from "../../../context/nav_context";
 import { useSelector, useDispatch } from "react-redux";
 import { root } from "../../../../store";
 import { setEditUser, setUserProfile } from "../../../../slices/userSlices";
 import Link from "next/link";
-
+// import { toast } from "sonner";
+import {  toast } from "react-toastify";
 const Page = () => {
   const user = useSelector((state) => state.persistedReducer.user.userValue);
   const userProfile = useSelector(
     (state) => state.persistedReducer.user.userProfile
   );
   const edit = useSelector((state) => state.persistedReducer.user.editUser);
-  console.log(edit);
-
   const dispatch = useDispatch();
+
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [profileImg, setProfileImg] = useState(userProfile.profilePicUrl || null);
-  // const [edit, setEdit] = useState(false);
+  const [profileImg, setProfileImg] = useState(
+    userProfile?.profilePicUrl || null
+  );
 
   const fileInputRef = useRef(null);
-
-  console.log(profileImg);
 
   useEffect(() => {
     const initializeJuno = async () => {
@@ -47,54 +43,9 @@ const Page = () => {
     initializeJuno();
   }, []);
 
-  const list = async () => {
-    try {
-      const { items } = await listDocs({
-        collection: "userProfile-details",
-      });
-      console.log(items);
-      setuserDetailHistory(items);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-
-  // await setDoc<Example>({
-  //   collection: "my_collection_key",
-  //   doc: {
-  //     ...myDoc, // includes 'key' and 'updated_at'
-  //     data: myNewData
-  //   }
-  // });
-
-  useEffect(() => {
-    if (user) {
-      list();
-    }
-  }, [user]);
-
-  // useEffect(() => {
-  //   const lastUserDetails = userDetailHistory[0];
-  //   if (typeof lastUserDetails === "object") {
-  //     dispatch(
-  //       setUserProfile({
-  //         ...lastUserDetails.data,
-  //         owner: lastUserDetails.owner,
-  //       })
-  //     );
-  //   }
-  // }, [dispatch, userDetailHistory]);
-
   const handleImageChange = (event) => {
     const file = event.currentTarget.files[0];
-    const files = event.target.files[0];
     setProfileImg(file);
-
-    const formData = new FormData();
-    formData.append("image", files);
-    console.log(file);
-    console.log(files);
 
     if (file) {
       const reader = new FileReader();
@@ -102,13 +53,9 @@ const Page = () => {
 
       reader.onloadend = () => {
         setSelectedImage(reader.result);
-        const formData = new FormData();
-        formData.append("image", reader.result);
-        console.log(formData);
       };
 
       reader.readAsDataURL(file);
-      console.log(reader.readAsDataURL(file));
     }
   };
 
@@ -123,11 +70,9 @@ const Page = () => {
     email: userProfile?.email || "",
     phoneNumber: userProfile?.phoneNumber || "",
     website: userProfile?.website || "",
-    fileDoc: userProfile.powUrl || null,
-    profileImageDoc: userProfile.profilePicUrl || "",
+    fileDoc: userProfile?.powUrl || null,
+    profileImageDoc: userProfile?.profilePicUrl || "",
   };
-
-  console.log(initialValues.fileDoc);
 
   const validationchema = Yup.object().shape({
     firstName: Yup.string().required("First name is required"),
@@ -141,6 +86,8 @@ const Page = () => {
   });
 
   const submitValue = async (values) => {
+    console.log(typeof values.fileDoc);
+
     setLoading(true);
     {
       let url;
@@ -148,7 +95,7 @@ const Page = () => {
 
       try {
         // Handle file upload logic
-        if (values.fileDoc == '') {
+        if (typeof values.fileDoc == "object") {
           const filename = `${user.key}-${values.fileDoc.name}`;
           console.log("Uploading file document...")
           const { downloadUrl } = await uploadFile({
@@ -159,7 +106,7 @@ const Page = () => {
           url = downloadUrl;
         }
 
-        if (profileImg == '') {
+        if (typeof profileImg === "object") {
           const filename = `${user.key}-${profileImg.name}`;
           console.log("Uploading profile image...")
           const { downloadUrl } = await uploadFile({
@@ -180,8 +127,8 @@ const Page = () => {
           email: values.email,
           phoneNumber: values.phoneNumber,
           website: values.website,
-          powUrl: url || userProfile.powUrl,
-          profilePicUrl: ImageUrl || userProfile.profilePicUrl,
+          powUrl: url || userProfile?.powUrl,
+          profilePicUrl: ImageUrl || userProfile?.profilePicUrl,
         };
 
         console.log(value);
@@ -197,9 +144,14 @@ const Page = () => {
           }
         );
         const data = await response.json();
-        console.log("Profile updated successfully:", data);
-        dispatch(setUserProfile(data.user));
-        dispatch(setEditUser(false));
+        if (data.success === true) {
+          console.log("Profile updated successfully:", data);
+          dispatch(setUserProfile(data.user));
+          dispatch(setEditUser(false))
+          toast.success(`${data.message}`);
+        } else{
+          toast.error(`${data.message}`)
+        }
         // Handle success response here
       } catch (error) {
         console.error("Upload Error:", error);
@@ -221,12 +173,14 @@ const Page = () => {
               className="w-full h-full rounded-full bg-cover"
             />
           )}
-          <div
-            className="bg-white p-[10px] rounded-full z-20 absolute -right-2 shadow-md top-[124px] cursor-pointer "
-            onClick={handleUploadButtonClick}
-          >
-            <Image src={Edit} alt="Edit image" className=" w-6" />
-          </div>
+          {edit && (
+            <div
+              className="bg-white p-[10px] rounded-full z-20 absolute -right-2 shadow-md top-[124px] cursor-pointer "
+              onClick={handleUploadButtonClick}
+            >
+              <Image src={Edit} alt="Edit image" className=" w-6" />
+            </div>
+          )}
         </div>
         <input
           name="profileImageDoc"
@@ -269,7 +223,7 @@ const Page = () => {
                     />
                   ) : (
                     <p className="text-[17px] text-black capitalize">
-                      {userProfile.firstName}
+                      {userProfile?.firstName}
                     </p>
                   )}
                   <ErrorMessage name="firstName" component={Error} />
@@ -292,7 +246,7 @@ const Page = () => {
                     />
                   ) : (
                     <p className="text-[17px] text-black capitalize">
-                      {userProfile.lastName}
+                      {userProfile?.lastName}
                     </p>
                   )}
                   <ErrorMessage name="lastName" component={Error} />
@@ -315,7 +269,9 @@ const Page = () => {
                       className="border outline-none rounded-[4px] border-black p-2 max-h-[90px]"
                     />
                   ) : (
-                    <p className="text-[17px] text-black ">{userProfile.bio}</p>
+                    <p className="text-[17px] text-black ">
+                      {userProfile?.bio}
+                    </p>
                   )}
                 </div>
                 <div className="flex flex-col gap-3 text-16 ">
@@ -335,7 +291,7 @@ const Page = () => {
                     />
                   ) : (
                     <p className="text-[17px] text-black">
-                      {userProfile.email}
+                      {userProfile?.email}
                     </p>
                   )}
                   <ErrorMessage name="email" component={Error} />
@@ -358,7 +314,7 @@ const Page = () => {
                     />
                   ) : (
                     <p className="text-[17px] text-black capitalize">
-                      {userProfile.phoneNumber}
+                      {userProfile?.phoneNumber}
                     </p>
                   )}
                   <ErrorMessage name="phoneNumber" component={Error} />
@@ -380,12 +336,13 @@ const Page = () => {
                       className="border outline-none rounded-[4px] border-black p-2"
                     />
                   ) : (
-                    userProfile.website && (
+                    userProfile?.website && (
                       <Link
-                        href={userProfile?.website}
+                        // target={userProfile?.website}
+                        href={`https://${userProfile?.website}`}
                         className="text-[17px] text-black"
                       >
-                        {userProfile.website}
+                        {userProfile?.website}
                       </Link>
                     )
                   )}
@@ -411,7 +368,7 @@ const Page = () => {
                       }
                     />
                   ) : (
-                    userProfile.powUrl && (
+                    userProfile?.powUrl && (
                       <Link
                         href={userProfile?.powUrl}
                         className="border p-3 bg-white shadow-md font-semibold mt-3"
@@ -442,9 +399,6 @@ const Page = () => {
                       if (edit) {
                         if (isValid && dirty) {
                           submitValue(values);
-                          // console.log(values);
-                          // console.log(profileImg);
-                          // setLoading(true);
                         }
                       } else {
                         dispatch(setEditUser(true));

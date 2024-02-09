@@ -4,6 +4,10 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import ReduxProvider from "../components/reduxProvider";
 import { NavProvider } from "../context/nav_context";
 import JunoProvider from "../components/junoProvider";
+import { Toaster } from "sonner";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const inter = Inter({
   subsets: ["latin"],
@@ -21,12 +25,13 @@ export default async function RootLayout({ children }) {
     <html lang="en">
       <body className={`${inter.variable} font-inter`}>
         {/* <NavProvider> */}
-          <AppRouterCacheProvider>
-            <JunoProvider>
-              <ReduxProvider>{children}</ReduxProvider>
-            </JunoProvider>
-          </AppRouterCacheProvider>
+        <AppRouterCacheProvider>
+          <JunoProvider>
+            <ReduxProvider>{children}</ReduxProvider>
+          </JunoProvider>
+        </AppRouterCacheProvider>
         {/* </NavProvider> */}
+        <ToastContainer/>
       </body>
     </html>
   );

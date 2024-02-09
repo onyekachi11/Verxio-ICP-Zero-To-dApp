@@ -12,6 +12,10 @@ import {
 import { useRouter } from "next/navigation";
 import Button from "../Button";
 import { Logo } from "../atoms";
+// import { throttle } from "lodash";
+// import { toast } from "sonner";
+import {  toast } from "react-toastify";
+
 
 const HomeHeader = () => {
   const dispatch = useDispatch();
@@ -20,6 +24,8 @@ const HomeHeader = () => {
   const userProfile = useSelector(
     (state) => state.persistedReducer.user.userProfile
   );
+  // const throttledFetchData = throttle((key) => fetchData(key), 1000);
+  // const throttledUnsubscribe = throttle((key) => unsubscribe, 1000);
 
   const [user2, setUser2] = useState(null);
 
@@ -42,20 +48,6 @@ const HomeHeader = () => {
     initializeJuno();
   }, []);
 
-  useEffect(() => {
-    const unsubscribe = authSubscribe((userData) => {
-      if (userData) {
-        const { key, owner } = userData;
-        dispatch(setUserValue({ key, owner }));
-      }
-    });
-    // user?.key && fetchData(user?.key);
-    // fetchData(user?.key);
-    return () => {
-      unsubscribe();
-    };
-  }, [dispatch, user?.key]);
-
   const fetchData = async (value) => {
     try {
       const response = await fetch(
@@ -63,63 +55,41 @@ const HomeHeader = () => {
       ); // Replace with your actual endpoint
       if (response.ok) {
         const responseData = await response.json();
-        console.log(responseData);
+        // console.log(responseData);
         dispatch(setUserProfile(responseData.user));
         setUser2(responseData.user);
         router.push("/dashboard");
+        toast.success("Login Successfull");
       } else {
         console.error("GET request failed");
-        console.log(response.status);
-        response.status === 404 && router.push("/dashboard/settings");
-        if (error) {
-          console.log(response);
+        // console.log(response.status);
+        if (response.status === 404) {
+          toast.info("Pls create account");
+          router.push("/dashboard/settings");
         }
       }
-      return response;
+      // return response;
     } catch (error) {
       console.log("Error occurred while fetching data:", error);
     }
   };
 
-  // useLayoutEffect(() => {
-  //   if (!user?.key) {
-  //     router.push("/");
-  //   }
-  // });
-
-  // const handleLogin = async () => {
-  //   if (user?.key && Object.keys(userProfile).length !== 0) {
-  //     router.push("/dashboard/earn");
-  //   } else if (
-  //     user?.key &&
-  //     userProfile &&
-  //     Object.keys(userProfile).length == 0
-  //   ) {
-  //     dispatch(setEditUser(true));
-  //     router.push("/dashboard/submissions");
-  //   } else {
-  //     try {
-  //       await signIn();
-  //       if (user2 !== null && Object.keys(user2).length == 0) {
-  //         router.push("/dashboard/learn");
-  //       } else {
-  //         router.push("/dashboard/earn");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error during sign-in:", error);
-  //     }
-  //   }
-  // };
-
   const handleLogin = async () => {
-    if (user?.key && Object.keys(user2).length !== 0) {
+    if (user?.key && userProfile !== false) {
       router.push("/dashboard");
     } else if (!user?.key && !user2) {
-      await signIn();
+      signIn();
+      authSubscribe((userData) => {
+        if (userData) {
+          const { key, owner } = userData;
+          dispatch(setUserValue({ key, owner }));
+        }
+      });
     }
+    // fetchData(user?.key);
   };
 
-  user?.key && fetchData(user?.key);
+  // user?.key && fetchData(user?.key);
 
   return (
     <div className="flex justify-between  items-center w-full h-[100px] px-[45px] py-[40px]">
@@ -134,15 +104,26 @@ const HomeHeader = () => {
           <li>Contact us</li>
         </ul>
       </div>
-      <Button
-        name="Get started"
-        onClick={() => {
-          handleLogin();
-          // user?.key && fetchData(user?.key);
-        }}
-        outline
-        className="border-white text-[14px] text-white"
-      />
+      {user?.key ? (
+        <Button
+          name="enter app"
+          onClick={() => {
+            // handleLogin();
+            fetchData(user?.key);
+          }}
+          outline
+          className="border-white text-[14px] text-white"
+        />
+      ) : (
+        <Button
+          name=" Get Started"
+          onClick={() => {
+            handleLogin();
+          }}
+          outline
+          className="border-white text-[14px] text-white"
+        />
+      )}
     </div>
   );
 };

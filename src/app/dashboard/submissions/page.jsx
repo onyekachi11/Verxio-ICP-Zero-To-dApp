@@ -84,7 +84,9 @@ const Page = () => {
         <h2 className="text-primary text-[28px] font-semibold capitalize">
           Submissions
         </h2>
-        {activeTab === 1 && <Button outline name="assign" onClick={handleAssignButtonClick} />}
+        {activeTab === 1 && (
+          <Button outline name="assign" onClick={handleAssignButtonClick} />
+        )}
       </div>
       <div className="flex gap-5 mb-7">
         <Button
@@ -121,11 +123,19 @@ const Page = () => {
             />
           ))}
       {activeTab === 2 &&
-      <div>
-        <p>Apply to a Task</p>
-      </div>
-
-          }
+        // <div>
+        //   <p>Apply to a Task</p>
+        // </div>
+        submissions
+          .filter((items) => items.applicantId == user.owner)
+          .map((item) => (
+            <SubmissionCard
+              key={item.applicantId}
+              item={item}
+              selectUser={selectUser}
+              isChecked={isCheckeds}
+            />
+          ))}
     </div>
   );
 };

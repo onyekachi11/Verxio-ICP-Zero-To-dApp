@@ -36,7 +36,7 @@ const Page = () => {
   return (
     <div className="border p-[32px] rounded-2xl">
       <h2 className="text-primary text-[28px] font-semibold mb-[32px] capitalize">
-        Welcome back {userProfile.firstName}
+        Welcome back {userProfile?.firstName}
         {/* Welcome back */}
       </h2>
       {jobs?.map((item) => (
