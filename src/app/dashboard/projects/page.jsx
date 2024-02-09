@@ -1,8 +1,30 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import Button from "../../../components/Button";
 import ProjectCard from "../../../components/projectCard";
+import { listDocs } from "@junobuild/core-peer";
+import { useSelector } from "react-redux";
 
 const page = () => {
+
+  const user = useSelector((state) => state.persistedReducer.user.userValue);
+  useEffect(() => {
+    const list = async () => {
+      try {
+        const { items } = await listDocs({
+          collection: "projects",
+        });
+          console.log("Projects", items)
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    if (user) {
+      list();
+    }
+  }, [user]);
+
   const data = [
     {
       id: 1,

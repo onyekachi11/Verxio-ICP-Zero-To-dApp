@@ -96,10 +96,12 @@ const Page = () => {
     {
       let url;
       let ImageUrl;
+
       try {
         // Handle file upload logic
-        if (values.fileDoc == '') {
+        if (values.fileDoc !== '') {
           const filename = `${user.key}-${values.fileDoc.name}`;
+          console.log("Uploading file document...")
           const { downloadUrl } = await uploadFile({
             collection: "userProfile-document",
             data: values.fileDoc,
@@ -108,8 +110,9 @@ const Page = () => {
           url = downloadUrl;
         }
 
-        if (profileImg == '') {
+        if (profileImg !== '') {
           const filename = `${user.key}-${profileImg.name}`;
+          console.log("Uploading profile image...")
           const { downloadUrl } = await uploadFile({
             collection: "userProfile-photo",
             data: profileImg,
@@ -388,8 +391,8 @@ const Page = () => {
                       if (edit) {
                         if (isValid && dirty) {
                           submitValue(values);
-                          console.log(values);
-                          console.log(profileImg);
+                          // console.log(values);
+                          // console.log(profileImg);
                           // setLoading(true);
                         }
                       } else {
