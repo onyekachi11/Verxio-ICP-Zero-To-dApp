@@ -3,20 +3,25 @@ import { signOut } from "@junobuild/core-peer";
 import Image from "next/image";
 import SignOut from "../assets/SignOut.svg";
 import { useDispatch } from "react-redux";
-import { setUserValue, setUserProfile, setEditUser } from "../../slices/userSlices";
+import {
+  setUserValue,
+  setUserProfile,
+  setEditUser,
+  resetState,
+} from "../../slices/userSlices";
 import { useRouter } from "next/navigation";
 
 const LogoutButton = () => {
-
   const dispatch = useDispatch();
-  const router = useRouter()
+  const router = useRouter();
 
   const handleLogout = () => {
     signOut();
-    dispatch(setUserValue({}));
-    dispatch(setUserProfile({}))
-    dispatch(setEditUser(false))
-    router.push('/')
+    // dispatch(setUserValue({}));
+    // dispatch(setUserProfile({}));
+    // dispatch(setEditUser(false));
+    dispatch(resetState());
+    router.push("/");
   };
 
   return (

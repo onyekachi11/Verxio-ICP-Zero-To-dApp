@@ -21,9 +21,10 @@ const userSlice = createSlice({
     setEditUser: (state, action) => {
       state.editUser = action.payload;
     },
+    resetState: (state) => initialState,
   },
 });
 
 // Exporting the reducer and actions
 export default userSlice.reducer;
-export const { setUserValue, setUserProfile, setEditUser } = userSlice.actions;
+export const { setUserValue, setUserProfile, setEditUser, resetState } = userSlice.actions;

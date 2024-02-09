@@ -4,7 +4,7 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import ReduxProvider from "../components/reduxProvider";
 import { NavProvider } from "../context/nav_context";
 import JunoProvider from "../components/junoProvider";
-
+import { Toaster } from "sonner";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--inter",
@@ -27,6 +27,7 @@ export default async function RootLayout({ children }) {
             </JunoProvider>
           </AppRouterCacheProvider>
         {/* </NavProvider> */}
+        <Toaster/>
       </body>
     </html>
   );

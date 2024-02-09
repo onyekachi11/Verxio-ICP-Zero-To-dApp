@@ -1,15 +1,12 @@
 "use client";
-import { useContext, useEffect, useState, React, useRef } from "react";
-import { authSubscribe, initJuno, listDocs } from "@junobuild/core-peer";
+import { useEffect, useState, React, useRef } from "react";
+import {  initJuno} from "@junobuild/core-peer";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Button from "../../../components/Button";
 import Edit from "../../../assets/edit.svg";
 import * as Yup from "yup";
 import { uploadFile, setDoc } from "@junobuild/core-peer";
-import { nanoid } from "nanoid";
-import { LoadingButton } from "@mui/lab";
 import Image from "next/image";
-import { useNav } from "../../../context/nav_context";
 import { useSelector, useDispatch } from "react-redux";
 import { root } from "../../../../store";
 import { setEditUser, setUserProfile } from "../../../../slices/userSlices";
@@ -21,20 +18,15 @@ const Page = () => {
     (state) => state.persistedReducer.user.userProfile
   );
   const edit = useSelector((state) => state.persistedReducer.user.editUser);
-  console.log(edit);
-
   const dispatch = useDispatch();
 
-  const [userDetailHistory, setuserDetailHistory] = useState([]);
-  // const [userProfile, setuserProfile] = useState();
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [profileImg, setProfileImg] = useState(userProfile.profilePicUrl || null);
-  // const [edit, setEdit] = useState(false);
+  const [profileImg, setProfileImg] = useState(
+    userProfile.profilePicUrl || null
+  );
 
   const fileInputRef = useRef(null);
-
-  console.log(profileImg);
 
   useEffect(() => {
     const initializeJuno = async () => {
@@ -51,33 +43,9 @@ const Page = () => {
     initializeJuno();
   }, []);
 
-  const list = async () => {
-    try {
-      const { items } = await listDocs({
-        collection: "userProfile-details",
-      });
-      console.log(items);
-      setuserDetailHistory(items);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  useEffect(() => {
-    if (user) {
-      list();
-    }
-  }, [user]);
-
   const handleImageChange = (event) => {
     const file = event.currentTarget.files[0];
-    const files = event.target.files[0];
     setProfileImg(file);
-
-    const formData = new FormData();
-    formData.append("image", files);
-    console.log(file);
-    console.log(files);
 
     if (file) {
       const reader = new FileReader();
@@ -85,13 +53,9 @@ const Page = () => {
 
       reader.onloadend = () => {
         setSelectedImage(reader.result);
-        const formData = new FormData();
-        formData.append("image", reader.result);
-        console.log(formData);
       };
 
       reader.readAsDataURL(file);
-      console.log(reader.readAsDataURL(file));
     }
   };
 
@@ -110,8 +74,6 @@ const Page = () => {
     profileImageDoc: userProfile.profilePicUrl || "",
   };
 
-  console.log(initialValues.fileDoc);
-
   const validationchema = Yup.object().shape({
     firstName: Yup.string().required("First name is required"),
     lastName: Yup.string().required("Last name is required"),
@@ -124,13 +86,15 @@ const Page = () => {
   });
 
   const submitValue = async (values) => {
+    console.log(typeof values.fileDoc);
+
     setLoading(true);
     {
       let url;
       let ImageUrl;
       try {
         // Handle file upload logic
-        if (values.fileDoc == null) {
+        if (typeof values.fileDoc == "object") {
           const filename = `${user.key}-${values.fileDoc.name}`;
           const { downloadUrl } = await uploadFile({
             collection: "userProfile-document",
@@ -140,7 +104,7 @@ const Page = () => {
           url = downloadUrl;
         }
 
-        if (profileImg == null) {
+        if (typeof profileImg === "object") {
           const filename = `${user.key}-${profileImg.name}`;
           const { downloadUrl } = await uploadFile({
             collection: "userProfile-photo",
@@ -201,12 +165,14 @@ const Page = () => {
               className="w-full h-full rounded-full bg-cover"
             />
           )}
-          <div
-            className="bg-white p-[10px] rounded-full z-20 absolute -right-2 shadow-md top-[124px] cursor-pointer "
-            onClick={handleUploadButtonClick}
-          >
-            <Image src={Edit} alt="Edit image" className=" w-6" />
-          </div>
+          {edit && (
+            <div
+              className="bg-white p-[10px] rounded-full z-20 absolute -right-2 shadow-md top-[124px] cursor-pointer "
+              onClick={handleUploadButtonClick}
+            >
+              <Image src={Edit} alt="Edit image" className=" w-6" />
+            </div>
+          )}
         </div>
         <input
           name="profileImageDoc"
@@ -422,9 +388,6 @@ const Page = () => {
                       if (edit) {
                         if (isValid && dirty) {
                           submitValue(values);
-                          console.log(values);
-                          console.log(profileImg);
-                          // setLoading(true);
                         }
                       } else {
                         dispatch(setEditUser(true));
