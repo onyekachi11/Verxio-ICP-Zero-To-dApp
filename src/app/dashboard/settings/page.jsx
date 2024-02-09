@@ -24,9 +24,6 @@ const Page = () => {
   console.log(edit);
 
   const dispatch = useDispatch();
-
-  const [userDetailHistory, setuserDetailHistory] = useState([]);
-  // const [userProfile, setuserProfile] = useState();
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [profileImg, setProfileImg] = useState(userProfile.profilePicUrl || null);
@@ -44,7 +41,6 @@ const Page = () => {
         });
       } catch (error) {
         console.error("Error initializing Juno:", error);
-        // Handle the error, e.g., show a user-friendly message or redirect to an error page.
       }
     };
 
@@ -63,11 +59,32 @@ const Page = () => {
     }
   };
 
+
+  // await setDoc<Example>({
+  //   collection: "my_collection_key",
+  //   doc: {
+  //     ...myDoc, // includes 'key' and 'updated_at'
+  //     data: myNewData
+  //   }
+  // });
+
   useEffect(() => {
     if (user) {
       list();
     }
   }, [user]);
+
+  // useEffect(() => {
+  //   const lastUserDetails = userDetailHistory[0];
+  //   if (typeof lastUserDetails === "object") {
+  //     dispatch(
+  //       setUserProfile({
+  //         ...lastUserDetails.data,
+  //         owner: lastUserDetails.owner,
+  //       })
+  //     );
+  //   }
+  // }, [dispatch, userDetailHistory]);
 
   const handleImageChange = (event) => {
     const file = event.currentTarget.files[0];
@@ -128,10 +145,12 @@ const Page = () => {
     {
       let url;
       let ImageUrl;
+
       try {
         // Handle file upload logic
-        if (values.fileDoc == null) {
+        if (values.fileDoc == '') {
           const filename = `${user.key}-${values.fileDoc.name}`;
+          console.log("Uploading file document...")
           const { downloadUrl } = await uploadFile({
             collection: "userProfile-document",
             data: values.fileDoc,
@@ -140,8 +159,9 @@ const Page = () => {
           url = downloadUrl;
         }
 
-        if (profileImg == null) {
+        if (profileImg == '') {
           const filename = `${user.key}-${profileImg.name}`;
+          console.log("Uploading profile image...")
           const { downloadUrl } = await uploadFile({
             collection: "userProfile-photo",
             data: profileImg,
@@ -422,8 +442,8 @@ const Page = () => {
                       if (edit) {
                         if (isValid && dirty) {
                           submitValue(values);
-                          console.log(values);
-                          console.log(profileImg);
+                          // console.log(values);
+                          // console.log(profileImg);
                           // setLoading(true);
                         }
                       } else {
