@@ -4,12 +4,14 @@ import Button from "../../../components/Button";
 import SubmissionCard from "../../../components/submissionCard";
 import { useSelector } from "react-redux";
 import { listDocs, setDoc } from "@junobuild/core-peer";
+import { toast } from "react-toastify";
 
 const Page = () => {
   const [assignees, setAssignees] = useState([]);
   const [isCheckeds, setIscheckeds] = useState(false);
   const [submissions, setSubmissions] = useState([]);
   const [activeTab, setActiveTab] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   const user = useSelector((state) => state.persistedReducer.user.userValue);
 
@@ -56,6 +58,7 @@ const Page = () => {
   console.log("assignees", assignees);
 
   const handleAssignButtonClick = async () => {
+    setLoading(true);
     try {
       if (assignees.length > 0) {
         // console.log("Assigned items:", assignees);
@@ -66,16 +69,22 @@ const Page = () => {
           collection: "projects",
           doc: {
             key: documentKey,
-            data: assignees
-          }
+            data: assignees,
+          },
         });
         console.log("Project assignment done.");
+        toast.success('Assignment successfull')
       } else {
-        console.log("No items assigned. Please select at least one item before clicking Assign.");
+        console.log(
+          "No items assigned. Please select at least one item before clicking Assign."
+          );
+          toast.info("Please select at least one item ");
       }
     } catch (error) {
       console.error("Error assigning items:", error);
+      toast.error('Assignment failed')
     }
+    setLoading(false);
   };
 
   return (
@@ -85,7 +94,7 @@ const Page = () => {
           Submissions
         </h2>
         {activeTab === 1 && (
-          <Button outline name="assign" onClick={handleAssignButtonClick} />
+          <Button outline name="assign" isLoading={loading} onClick={handleAssignButtonClick} />
         )}
       </div>
       <div className="flex gap-5 mb-7">

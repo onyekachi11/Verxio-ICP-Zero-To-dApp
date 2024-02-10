@@ -14,9 +14,9 @@ const VideoCard = () => {
         height="180"
         src={`https://www.youtube.com/embed/mr_9XArcG9Y?si=WR-xff-GIy5xLJd8`}
         title="YouTube video player"
-        frameborder="0"
+        // frameborder="0"
         allow="accelerometer; clipboard-write; encrypted-media; gyroscope;"
-        allowfullscreen
+        // allowfullscreen
       ></iframe>
 
       <div className="flex flex-col w-[80%] ">

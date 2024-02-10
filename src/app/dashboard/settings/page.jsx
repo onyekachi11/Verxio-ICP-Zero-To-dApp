@@ -11,7 +11,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { root } from "../../../../store";
 import { setEditUser, setUserProfile } from "../../../../slices/userSlices";
 import Link from "next/link";
-// import { toast } from "sonner";
 import {  toast } from "react-toastify";
 const Page = () => {
   const user = useSelector((state) => state.persistedReducer.user.userValue);
