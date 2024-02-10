@@ -47,7 +47,7 @@ const JobDescription = () => {
 
           
           await setDoc({
-            collection: "taskProposals",
+            collection: "proposals",
             doc: {
               key: data.taskId,
               data: submissionData

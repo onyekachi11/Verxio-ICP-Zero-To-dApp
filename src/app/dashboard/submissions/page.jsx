@@ -17,7 +17,7 @@ const Page = () => {
     const list = async () => {
       try {
         const { items } = await listDocs({
-          collection: "taskProposals",
+          collection: "proposals",
         });
 
         const allSubmission = items.map((item) => {
