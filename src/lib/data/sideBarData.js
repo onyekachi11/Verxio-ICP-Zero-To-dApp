@@ -17,11 +17,11 @@ export const NavigationItems = [
     icon: BookOpen,
     tabUrl: "/dashboard/learn",
   },
-  {
-    tab: "DAO Proposals",
-    icon: Handshake,
-    tabUrl: "/dashboard/dao-proposal",
-  },
+  // {
+  //   tab: "DAO Proposals",
+  //   icon: Handshake,
+  //   tabUrl: "/dashboard/dao-proposal",
+  // },
   {
     tab: "Projects",
     icon: Kanban,

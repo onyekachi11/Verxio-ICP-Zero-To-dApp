@@ -1,6 +1,6 @@
 // "use client"
 import Image from "next/image";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Ethereum from "../../assets/ethereum.svg";
 import ICP from "../../assets/icp-logo.svg";
 import USDC from '../../assets/usdc-logo.svg'
@@ -15,12 +15,16 @@ import CommentButton from "../commentButton";
 const JobCard = ({ jobs }) => {
 
   const dispatch = useDispatch();
+  const [ownerDetails, setOwnerDetails] = useState(null);
   // const { data } = jobs;
 
   const data = {
     ...jobs.data,
     taskId: jobs.key,
-    owner: jobs.owner
+    owner: jobs.owner,
+    ownerFirstName: ownerDetails?.firstName,
+    ownerLastName: ownerDetails?.lastName,
+    ownerBio: ownerDetails?.bio,
   }
 
   const logo = (coin) => {
@@ -38,6 +42,22 @@ const JobCard = ({ jobs }) => {
     // return null
   };
 
+  useEffect(() => {
+    const fetchOwnerDetails = async () => {
+      try {
+        const response = await fetch(
+          `https://verxio-backend.vercel.app/api/v1/profiles/${jobs.owner}`
+        );
+        const ownerData = await response.json();
+        setOwnerDetails(ownerData.user);
+      } catch (error) {
+        console.error("Error fetching owner details:", error);
+      }
+    };
+
+    fetchOwnerDetails();
+  }, [jobs.owner]);
+
   return (
     <div className="bg-[#FFFFFF] px-[32px] py-[24px] rounded-2xl shadow mb-[34px]">
       <div className=" rounded-2xl bg-[#F7F7FD] p-[18px] cursor-pointer flex justify-between border">
@@ -47,14 +67,12 @@ const JobCard = ({ jobs }) => {
           </div>
           <div className="flex flex-col gap-2">
             <p className="text-[#020202] text-[18px] font-semibold capitalize">
-              {/* Trail Bitz Company */}
               {data?.title}
             </p>
             <p className="font-normal text-[14px] text-[#424242]">
-              {data?.title}/{data.jobType}/ Lagos.
+              {data?.ownerFirstName} {data?.ownerLastName}.
             </p>
             <p className="text-[#484851] font-normal text-[16px] truncate ... max-w-[400px]">
-              {/* {responsibilities} */}
               {data?.description}
             </p>
           </div>

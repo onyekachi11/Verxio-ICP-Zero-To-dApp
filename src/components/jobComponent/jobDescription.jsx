@@ -9,7 +9,7 @@ import PaperClip from "../../assets/paperclip.svg";
 import HardDrive from "../../assets/hard-drive.svg";
 import LinkIcon from "../../assets/link.svg";
 import DescListCard from "./descListCard";
-import { UseSelector, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import LikeButtons from "../likeButtons";
 import CommentButton from "../commentButton";
 import { setDoc } from "@junobuild/core-peer";
@@ -22,14 +22,10 @@ const JobDescription = () => {
     (state) => state.persistedReducer.jobValues.jobDetails
   );
 
-  // const { jobDetails } = useNav();
-
-  // const { data } = jobDetails;
-
   const userProfile = useSelector(
     (state) => state.persistedReducer.user.userProfile
   );
-  console.log(data)
+  // console.log(data)
     // console.log(userProfile)
 
     const toggleModal = async () => {
@@ -99,7 +95,7 @@ const JobDescription = () => {
                   {data?.title}
                 </p>
                 <p className="font-normal text-[14px] text-[#424242]">
-                  Frontend engineer/ Full-time (remote)/ Lagos.
+                  {data.ownerBio}
                 </p>
               </div>
             </div>

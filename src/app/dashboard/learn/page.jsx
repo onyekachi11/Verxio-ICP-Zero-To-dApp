@@ -27,7 +27,7 @@ const Page = () => {
             Cryptocurrencies and Digital Assets
           </p>
           <p className="text-[#FBFBFE] font-normal opacity-85">
-            Tokenomics and Utility Tokens ,NFTs (Non-Fungible Tokens)
+            Tokenomics and Utility Tokens, NFTs (Non-Fungible Tokens)
             Demystified
           </p>
         </div>
