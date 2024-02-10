@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import { uploadFile, setDoc } from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
 import { useSelector } from "react-redux";
+import {  toast } from "react-toastify";
 
 const Page = () => {
 

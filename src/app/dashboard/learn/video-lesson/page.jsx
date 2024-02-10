@@ -11,28 +11,32 @@ const Page = () => {
           // width="500"
           height="480"
           className="w-full rounded-xl"
-          src={`https://www.youtube.com/embed/biLStWdY6rQ`}
+          src={`https://www.youtube.com/embed/mr_9XArcG9Y?si=WR-xff-GIy5xLJd8`}
           title="YouTube video player"
           frameborder="0"
           allow="accelerometer; clipboard-write; encrypted-media; gyroscope;"
           allowfullscreen
         ></iframe>
         <p className="font-semibold text-[24px] text-[#303036] mt-8">
-          Decentralized Finance (DeFi):
+        Building Dapps at Lightning Speed: Juno and the Internet Computer: <br/>
+
           <span className="text-[18px] font-light text-[#484851] ml-3">
-            Understanding protocols like Uniswap, MakerDAO etc.
+          In this workshop, you'll learn how easily you can implement authentication in your app,
+           save data and images on the chain, and ultimately launch your first smart contract 
+           on the Internet Computer. 
+          And the best part? You won't need to write a single line of backend code.
           </span>
         </p>
         <div className="flex items-center justify-between mt-5">
           <div className="flex gap-3 items-center">
             <div className="rounded-full w-[44px] h-[44px] flex justify-center items-center shadow-md bg-white">
-              <p className="text-[#00ADEF] text-[18px] font-semibold">k</p>
+              <p className="text-[#00ADEF] text-[18px] font-semibold">V</p>
             </div>
             <div>
               <p className="font-semibold text-[16px] text-[#60606C]">
-                Kayon Micheals.{" "}
+              David Dal Busco{" "}
               </p>
-              <p className="text-[12px] text-[#60606C]">Rie developer</p>
+              <p className="text-[12px] text-[#60606C]">Software Engineer at DFINITY</p>
             </div>
           </div>
           {/* <div> */}

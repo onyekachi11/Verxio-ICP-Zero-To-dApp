@@ -6,7 +6,7 @@ import chat from "../assets/comment-white.svg"
 const ProjectCard = ({ item }) => {
 
   console.log(item)
-  const { applicantFirstName, description, title, applicantlastName} = item;
+  const { applicantFirstName, description, title, applicantLastName} = item;
   return (
     <>
       <div className="border bg-[#F7F7FD] rounded-2xl px-[32px] py-[28px] ">
@@ -16,7 +16,7 @@ const ProjectCard = ({ item }) => {
               {title}
             </p>
             <p className="text-[16px] font-medium">
-              This agreement is with {applicantFirstName} {applicantlastName}
+              This agreement is with {applicantFirstName} {applicantLastName}
             </p>
           </div>
           <Button
