@@ -7,13 +7,9 @@ import {
   setUserProfile,
   setUserValue,
 } from "../../../slices/userSlices";
-// import { useNav } from "../../context/nav_context";
-// import { redirect } from "next/navigation";
 import { useRouter } from "next/navigation";
 import Button from "../Button";
 import { Logo } from "../atoms";
-// import { throttle } from "lodash";
-// import { toast } from "sonner";
 import {  toast } from "react-toastify";
 
 

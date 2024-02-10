@@ -5,17 +5,17 @@ import * as Yup from "yup";
 import { uploadFile, setDoc } from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
 import { useSelector } from "react-redux";
-import {  toast } from "react-toastify";
+import { toast } from "react-toastify";
+import { useState } from "react";
 
 const Page = () => {
+  const userProfile = useSelector(
+    (state) => state.persistedReducer.user.userProfile
+  );
 
-    const userProfile = useSelector(
-      (state) => state.persistedReducer.user.userProfile
-    );
+  const user = useSelector((state) => state.persistedReducer.user.userValue);
 
-    const user = useSelector(
-      (state) => state.persistedReducer.user.userValue
-    );
+  const [loading, setLoading] = useState(false);
 
   const initialValues = {
     title: "",
@@ -48,9 +48,10 @@ const Page = () => {
   });
 
   const submitValue = async (values) => {
+    setLoading(true);
     {
       console.log("Form values:", values);
-      let url; 
+      let url;
       try {
         // Handle file upload logic
         if (values.fileDoc !== undefined) {
@@ -64,9 +65,8 @@ const Page = () => {
         }
 
         // Access the download URL and other form values here
-          console.log("upload successful!...");
-          console.log("Download URL:", url);
-          
+        console.log("upload successful!...");
+        console.log("Download URL:", url);
 
         await setDoc({
           collection: "publish-task",
@@ -87,11 +87,15 @@ const Page = () => {
           },
         });
 
-        console.log("Task upload successful!...");
+        // console.log("Task upload successful!...");
+        toast.success("Task uploaded successfully.");
+        setLoading(false);
 
         // Now you can perform additional submit logic, e.g., send data to the server
       } catch (error) {
         console.error("File Error:", error);
+        toast.error('Task Upload Failed')
+        setLoading(false);
       }
     }
   };
@@ -215,12 +219,16 @@ const Page = () => {
               <ErrorMessage name="amount" component={Error} />
             </div>
             <div className="flex flex-col gap-3 text-16 ">
-              <label htmlFor="fileDoc">Upload File (doc, pdf, png, jpg, etc.)</label>
-              <input 
-              name="fileDoc"
-              className="border outline-none rounded-[4px] border-black p-2"
-              type="file"
-              onChange={(event) => setFieldValue("fileDoc", event.currentTarget.files[0])}
+              <label htmlFor="fileDoc">
+                Upload File (doc, pdf, png, jpg, etc.)
+              </label>
+              <input
+                name="fileDoc"
+                className="border outline-none rounded-[4px] border-black p-2"
+                type="file"
+                onChange={(event) =>
+                  setFieldValue("fileDoc", event.currentTarget.files[0])
+                }
               />
               <ErrorMessage name="fileDoc" component={Error} />
             </div>
@@ -228,6 +236,7 @@ const Page = () => {
               <Button
                 type="submit"
                 name="Submit"
+                isLoading={loading}
                 className="mt-8 w-full "
                 onClick={() => {
                   if (isValid && dirty) {
@@ -249,4 +258,3 @@ export default Page;
 const Error = ({ children }) => {
   return <p className="text-red-400  text-[12px] mt-[-5px]">{children}</p>;
 };
-

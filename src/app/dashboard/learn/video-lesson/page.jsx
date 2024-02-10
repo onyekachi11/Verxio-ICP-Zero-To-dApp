@@ -13,18 +13,18 @@ const Page = () => {
           className="w-full rounded-xl"
           src={`https://www.youtube.com/embed/mr_9XArcG9Y?si=WR-xff-GIy5xLJd8`}
           title="YouTube video player"
-          frameborder="0"
           allow="accelerometer; clipboard-write; encrypted-media; gyroscope;"
-          allowfullscreen
+          allowFullScreen
         ></iframe>
         <p className="font-semibold text-[24px] text-[#303036] mt-8">
-        Building Dapps at Lightning Speed: Juno and the Internet Computer: <br/>
-
-          <span className="text-[18px] font-light text-[#484851] ml-3">
-          In this workshop, you'll learn how easily you can implement authentication in your app,
-           save data and images on the chain, and ultimately launch your first smart contract 
-           on the Internet Computer. 
-          And the best part? You won't need to write a single line of backend code.
+          Building Dapps at Lightning Speed: Juno and the Internet Computer:{" "}
+          <br />
+          <span className="text-[18px] font-light text-[#484851] ml-3 leading-[5px]">
+            In this workshop, you will learn how easily you can implement
+            authentication in your app, save data and images on the chain, and
+            ultimately launch your first smart contract on the Internet
+            Computer. And the best part? You won&apos;t need to write a single
+            line of backend code.
           </span>
         </p>
         <div className="flex items-center justify-between mt-5">
@@ -34,9 +34,11 @@ const Page = () => {
             </div>
             <div>
               <p className="font-semibold text-[16px] text-[#60606C]">
-              David Dal Busco{" "}
+                David Dal Busco{" "}
               </p>
-              <p className="text-[12px] text-[#60606C]">Software Engineer at DFINITY</p>
+              <p className="text-[12px] text-[#60606C]">
+                Software Engineer at DFINITY
+              </p>
             </div>
           </div>
           {/* <div> */}
