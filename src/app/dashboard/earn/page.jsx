@@ -18,7 +18,7 @@ const Page = () => {
         const { items } = await listDocs({
           collection: "publish-task",
         });
-        setJobs(items);
+        setJobs(items.reverse());
         console.log(items)
       } catch (error) {
         console.error("Error fetching data:", error);

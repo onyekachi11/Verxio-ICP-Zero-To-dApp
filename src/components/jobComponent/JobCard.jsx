@@ -70,7 +70,7 @@ const JobCard = ({ jobs }) => {
               {data?.title}
             </p>
             <p className="font-normal text-[14px] text-[#424242]">
-              {data?.ownerFirstName} {data?.ownerLastName}.
+              {data?.ownerFirstName} {data?.ownerLastName}
             </p>
             <p className="text-[#484851] font-normal text-[16px] truncate ... max-w-[400px]">
               {data?.description}
