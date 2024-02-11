@@ -1,4 +1,4 @@
-# Verxio: Unleash Your Creative Potential in the Decentralized Web3 Ecosystem
+# Verxio
 
 **Verxio** empowers talents through a decentralized Web3 ecosystem, ensuring fair monetization for creative endeavors and contributions.
 
