@@ -5,6 +5,8 @@ import Button from "../Button";
 import Ethereum from "../../assets/ethereum.svg";
 import ICP from "../../assets/icp-logo.svg";
 import Solana from "../../assets/solana-logo.svg";
+import USDC from "../../assets/usdc-logo.svg";
+import USDT from "../../assets/usdt-logo.svg"
 import PaperClip from "../../assets/paperclip.svg";
 import HardDrive from "../../assets/hard-drive.svg";
 import LinkIcon from "../../assets/link.svg";
