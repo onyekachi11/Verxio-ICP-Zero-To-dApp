@@ -1,5 +1,7 @@
 # Verxio
 
+Verxio is a do-to-earn platform where project founders and protocols fund a reward pool that is task-based. Users earn as much as they participate in these tasks.
+
 **Verxio** empowers talents through a decentralized Web3 ecosystem, ensuring fair monetization for creative endeavors and contributions.
 
 ## Explore Verxio's Three Pillars:
@@ -10,14 +12,16 @@ Embark on a journey into the future of work, creating opportunities for all.
 ### Verxio Learn
 Discover a decentralized learning platform that transforms skill development.
 
-### Verxio DAO
-Join a decentralized autonomous organization committed to enhancing community engagement and fostering growth.
 
 ## Built on Juno: Unleashing the Power of Web3
 
-- **Authentication:** Leverage Juno authentication for seamless user logins and logouts within the Verxio dApp.
-- **Storage:** Utilize Juno Storage to host user documents, resumes, and profile photos, creating a secure environment on Verxio.
-- **Data Infrastructure:** Empower Verxio's backend with Juno Datastore, managing job opportunities, proposals, project contracts, and more.
+The majority of Verxio's backend was built with the ICP canister and Juno as follow  
+
+- Juno authentication was used to securely identify users anonymously and save their data on the blockchain.  
+
+- Juno datastore stores information like the all-created job/task, task proposals, assigned projects, and job/task submissions.
+
+- Juno storage was used to store all user files, including profile images, documents, resumes, etc.
 
 ## Next Steps: Evolving for You
 
