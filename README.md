@@ -1,6 +1,18 @@
-# Verxio
+<div align="center">
+
+[![logo](https://github.com/onyekachi11/Verxio-ICP-Zero-To-dApp/blob/main/src/assets/Logo.svg)](https://verxio-icp-zero-to-d-app.vercel.app/)
 
 Verxio is a do-to-earn platform where project founders and protocols fund a reward pool that is task-based. Users earn as much as they participate in these tasks.
+
+<h3>
+  
+[Verxio Repo](https://github.com/onyekachi11/Verxio-ICP-Zero-To-dApp/) | [Verxio Demo](https://verxio-icp-zero-to-d-app.vercel.app/) | [Verxio Demo Video](https://youtu.be/XGH2ZHDhv5M)
+
+</h3>
+
+</div>
+
+## 🚀 Key Features:
 
 **Verxio** empowers talents through a decentralized Web3 ecosystem, ensuring fair monetization for creative endeavors and contributions.
 
