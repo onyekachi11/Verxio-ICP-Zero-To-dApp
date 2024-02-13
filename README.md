@@ -34,7 +34,7 @@ The majority of Verxio's backend was built with the ICP canister and Juno as fol
 ## Next Steps: Evolving for You
 
 - **Smart Contracts:** Verxio's ecosystem smart contracts are ready, with ongoing development focusing on the Verxio DAO front end.
-- **Verxio Feed** Integrating a socialFi feature that turns Verxio an all-in-one social network for crypto talents.
+- **Verxio Feed:** Integrating a socialFi feature that turns Verxio an all-in-one social network for crypto talents.
 - **Community Involvement:** Verxio DAO will soon enable users to submit proposals, share ideas, and vote on community initiatives.
 - **Skill Enhancement:** Verxio Learn empowers users to enhance their skills, positioning them for lucrative opportunities.
 - **Integration Ahead:** Plans include integrating Juno DAO and Juno Payment, streamlining talent payments within the Verxio ecosystem.
