@@ -16,18 +16,14 @@ Verxio is a do-to-earn platform where project founders and protocols fund a rewa
 
 **Verxio** empowers talents through a decentralized Web3 ecosystem, ensuring fair monetization for creative endeavors and contributions.
 
-## Explore Verxio's Three Pillars:
+- Verxio Earn: Allowing users to embark on a journey into the future of work and creating opportunities for them.
 
-### Verxio Earn
-Embark on a journey into the future of work, creating opportunities for all.
-
-### Verxio Learn
-Discover a decentralized learning platform that transforms skill development.
+- Verxio Learn: Allowing users to discover a decentralized learning platform that transforms their skill development and better position them for earning opportunities.
 
 
-## Built on Juno: Unleashing the Power of Web3
+## 🚀 Juno Feature Integrations:
 
-The majority of Verxio's backend was built with the ICP canister and Juno as follow  
+The majority of Verxio's backend was built with the ICP canister and Juno as follows  
 
 - Juno authentication was used to securely identify users anonymously and save their data on the blockchain.  
 
@@ -37,7 +33,8 @@ The majority of Verxio's backend was built with the ICP canister and Juno as fol
 
 ## Next Steps: Evolving for You
 
-- **Smart Contracts:** Verxio's ecosystem smart contracts are ready, with ongoing development focusing on the Verxio DAO frontend.
+- **Smart Contracts:** Verxio's ecosystem smart contracts are ready, with ongoing development focusing on the Verxio DAO front end.
+- **Verxio Feed** Integrating a socialFi feature that turns Verxio an all-in-one social network for crypto talents.
 - **Community Involvement:** Verxio DAO will soon enable users to submit proposals, share ideas, and vote on community initiatives.
 - **Skill Enhancement:** Verxio Learn empowers users to enhance their skills, positioning them for lucrative opportunities.
 - **Integration Ahead:** Plans include integrating Juno DAO and Juno Payment, streamlining talent payments within the Verxio ecosystem.
